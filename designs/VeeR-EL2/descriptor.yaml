@@ -1,0 +1,120 @@
+origin:
+  - repository: https://github.com/chipsalliance/Cores-VeeR-EL2.git
+    revision: c5c004589ee0a308b63278ee609e1597f61a4143
+    license: https://github.com/chipsalliance/Cores-VeeR-EL2/blob/c5c004589ee0a308b63278ee609e1597f61a4143/LICENSE
+
+design:
+  verilogSourceFiles:
+    - src/el2_def.sv
+    - src/veer_wrapper.sv
+    - src/el2_veer_wrapper.sv
+    - src/el2_mem.sv
+    - src/el2_pic_ctrl.sv
+    - src/el2_veer.sv
+    - src/el2_dma_ctrl.sv
+    - src/el2_pmp.sv
+    - src/el2_ifu_aln_ctl.sv
+    - src/el2_ifu_compress_ctl.sv
+    - src/el2_ifu_ifc_ctl.sv
+    - src/el2_ifu_bp_ctl.sv
+    - src/el2_ifu_ic_mem.sv
+    - src/el2_ifu_mem_ctl.sv
+    - src/el2_ifu_iccm_mem.sv
+    - src/el2_ifu.sv
+    - src/el2_dec_decode_ctl.sv
+    - src/el2_dec_gpr_ctl.sv
+    - src/el2_dec_ib_ctl.sv
+    - src/el2_dec_pmp_ctl.sv
+    - src/el2_dec_tlu_ctl.sv
+    - src/el2_dec_trigger.sv
+    - src/el2_dec.sv
+    - src/el2_exu_alu_ctl.sv
+    - src/el2_exu_mul_ctl.sv
+    - src/el2_exu_div_ctl.sv
+    - src/el2_exu.sv
+    - src/el2_lsu.sv
+    - src/el2_lsu_clkdomain.sv
+    - src/el2_lsu_addrcheck.sv
+    - src/el2_lsu_lsc_ctl.sv
+    - src/el2_lsu_stbuf.sv
+    - src/el2_lsu_bus_buffer.sv
+    - src/el2_lsu_bus_intf.sv
+    - src/el2_lsu_ecc.sv
+    - src/el2_lsu_dccm_mem.sv
+    - src/el2_lsu_dccm_ctl.sv
+    - src/el2_lsu_trigger.sv
+    - src/el2_dbg.sv
+    - src/dmi_mux.v
+    - src/dmi_wrapper.v
+    - src/dmi_jtag_to_core_sync.v
+    - src/rvjtag_tap.v
+    - src/el2_lib.sv
+    - src/beh_lib.sv
+    - src/mem_lib.sv
+    - src/axi_lsu_dma_bridge.sv
+    - src/user_cells.sv
+    - src/tb_top_pkg.sv
+    - src/tb_top.sv
+    - src/ahb_sif.sv
+    - src/ahb_lite_2to1_mux.sv
+    - src/ahb_lsu_dma_bridge.sv
+    - src/axi_crossbar_wrap_2x1.v
+    - src/arbiter.v
+    - src/axi_crossbar_addr.v
+    - src/axi_crossbar_rd.v
+    - src/axi_crossbar.v
+    - src/axi_crossbar_wr.v
+    - src/axi_register_rd.v
+    - src/axi_register_wr.v
+    - src/priority_encoder.v
+    - src/el2_mem_if.sv
+  verilogIncludeFiles:
+    - src/dasm.svi
+    - src/el2_dec_csr_equ_m.svh
+    - src/icache_macros.svh
+  topModule: tb_top
+  mainClock: $root.tb_top.core_clk
+  verilatorArgs: [
+    --autoflush
+  ]
+  testPost: tests/post.bash
+
+configurations:
+  default:
+    verilogIncludeFiles:
+      - src/default/common_defines.vh
+      - src/default/el2_param.vh
+      - src/default/el2_pdef.vh
+      - src/default/pic_map_auto.h
+  hiperf:
+    verilogIncludeFiles:
+      - src/hiperf/common_defines.vh
+      - src/hiperf/el2_param.vh
+      - src/hiperf/el2_pdef.vh
+      - src/hiperf/pic_map_auto.h
+  asic:
+    verilogIncludeFiles:
+      - src/asic/common_defines.vh
+      - src/asic/el2_param.vh
+      - src/asic/el2_pdef.vh
+      - src/asic/pic_map_auto.h
+
+tests:
+  hello:
+    executeInputFiles:
+      tests/hello.hex: program.hex
+  cmark:
+    executeInputFiles:
+      tests/cmark.hex: program.hex
+    executeArgs:
+      - +iterations=14
+  cmark_iccm:
+    executeInputFiles:
+      tests/cmark_iccm.hex: program.hex
+    executeArgs:
+      - +iterations=21
+  dhry:
+    executeInputFiles:
+      tests/dhry.hex: program.hex
+    executeArgs:
+      - +iterations=17100

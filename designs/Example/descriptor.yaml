@@ -1,0 +1,21 @@
+origin:
+  - repository: local
+    revision: local
+    license: local
+
+design:
+  verilogSourceFiles:
+    - src/top.v
+  topModule: top
+  mainClock: $root.top.clk
+
+configurations:
+  default:
+  shout:
+    verilogDefines:
+      SHOUT: 1
+
+tests:
+  hello:
+  world:
+    executeArgs: [ +say_world=1 ]
