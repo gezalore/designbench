@@ -1,0 +1,86 @@
+origin:
+  repository: https://github.com/chipsalliance/Cores-VeeR-EH2.git
+  revision: aa502ec1594246d305bd0d95d69441b55c41c22e
+
+design:
+  verilogFiles:
+    - src/eh2_def.sv
+    - src/eh2_veer_wrapper.sv
+    - src/eh2_mem.sv
+    - src/eh2_pic_ctrl.sv
+    - src/eh2_veer.sv
+    - src/eh2_dma_ctrl.sv
+    - src/eh2_ifu_aln_ctl.sv
+    - src/eh2_ifu_compress_ctl.sv
+    - src/eh2_ifu_ifc_ctl.sv
+    - src/eh2_ifu_bp_ctl.sv
+    - src/eh2_ifu_ic_mem.sv
+    - src/eh2_ifu_mem_ctl.sv
+    - src/eh2_ifu_iccm_mem.sv
+    - src/eh2_ifu_btb_mem.sv
+    - src/eh2_ifu.sv
+    - src/eh2_dec_decode_ctl.sv
+    - src/eh2_dec_gpr_ctl.sv
+    - src/eh2_dec_ib_ctl.sv
+    - src/eh2_dec_tlu_ctl.sv
+    - src/eh2_dec_tlu_top.sv
+    - src/eh2_dec_csr.sv
+    - src/eh2_dec_trigger.sv
+    - src/eh2_dec.sv
+    - src/eh2_exu_alu_ctl.sv
+    - src/eh2_exu_mul_ctl.sv
+    - src/eh2_exu_div_ctl.sv
+    - src/eh2_exu.sv
+    - src/eh2_lsu.sv
+    - src/eh2_lsu_clkdomain.sv
+    - src/eh2_lsu_addrcheck.sv
+    - src/eh2_lsu_lsc_ctl.sv
+    - src/eh2_lsu_stbuf.sv
+    - src/eh2_lsu_bus_buffer.sv
+    - src/eh2_lsu_bus_intf.sv
+    - src/eh2_lsu_ecc.sv
+    - src/eh2_lsu_dccm_mem.sv
+    - src/eh2_lsu_dccm_ctl.sv
+    - src/eh2_lsu_trigger.sv
+    - src/eh2_lsu_amo.sv
+    - src/eh2_dbg.sv
+    - src/dmi_wrapper.v
+    - src/dmi_jtag_to_core_sync.v
+    - src/rvjtag_tap.v
+    - src/eh2_lib.sv
+    - src/beh_lib.sv
+    - src/mem_lib.sv
+    - src/axi_lsu_dma_bridge.sv
+    - src/tb_top.sv
+    - src/ahb_sif.sv
+  verilogIncdirs: [ src ]
+  topModule: tb_top
+  mainClock: $root.tb_top.core_clk
+  verilatorArgs: [
+    --autoflush
+  ]
+  testPrep: tests/prep.bash
+  testPost: tests/post.bash
+
+configurations:
+  default:
+    verilogIncdirs: [ src/default ]
+  hiperf:
+    verilogIncdirs: [ src/hiperf ]
+  asic:
+    verilogIncdirs: [ src/asic ]
+
+tests:
+  hello:
+  cmark:
+    executeArgs: [ +iterations=4 ]
+  cmark_mt:
+    executeArgs: [ +iterations=4 ]
+  cmark_iccm:
+    executeArgs: [ +iterations=9 ]
+  cmark_iccm_mt:
+    executeArgs: [ +iterations=6 ]
+  dhry:
+    executeArgs: [ +iterations=7800 ]
+  dhry_mt:
+    executeArgs: [ +iterations=6400 ]

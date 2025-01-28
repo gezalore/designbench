@@ -1,0 +1,76 @@
+origin:
+  repository: https://github.com/chipsalliance/Cores-VeeR-EH1.git
+  revision: 915fb34a5b38ef14c5d5c05431765ad8b912bc34
+
+design:
+  verilogFiles:
+    - src/veer_types.sv
+    - src/veer_wrapper.sv
+    - src/mem.sv
+    - src/pic_ctrl.sv
+    - src/veer.sv
+    - src/dma_ctrl.sv
+    - src/ifu_aln_ctl.sv
+    - src/ifu_compress_ctl.sv
+    - src/ifu_ifc_ctl.sv
+    - src/ifu_bp_ctl.sv
+    - src/ifu_ic_mem.sv
+    - src/ifu_mem_ctl.sv
+    - src/ifu_iccm_mem.sv
+    - src/ifu.sv
+    - src/dec_decode_ctl.sv
+    - src/dec_gpr_ctl.sv
+    - src/dec_ib_ctl.sv
+    - src/dec_tlu_ctl.sv
+    - src/dec_trigger.sv
+    - src/dec.sv
+    - src/exu_alu_ctl.sv
+    - src/exu_mul_ctl.sv
+    - src/exu_div_ctl.sv
+    - src/exu.sv
+    - src/lsu.sv
+    - src/lsu_clkdomain.sv
+    - src/lsu_addrcheck.sv
+    - src/lsu_lsc_ctl.sv
+    - src/lsu_stbuf.sv
+    - src/lsu_bus_buffer.sv
+    - src/lsu_bus_intf.sv
+    - src/lsu_ecc.sv
+    - src/lsu_dccm_mem.sv
+    - src/lsu_dccm_ctl.sv
+    - src/lsu_trigger.sv
+    - src/dbg.sv
+    - src/dmi_wrapper.v
+    - src/dmi_jtag_to_core_sync.v
+    - src/rvjtag_tap.sv
+    - src/beh_lib.sv
+    - src/mem_lib.sv
+    - src/ahb_to_axi4.sv
+    - src/axi4_to_ahb.sv
+    - src/tb_top.sv
+    - src/ahb_sif.sv
+  verilogIncdirs: [ src ]
+  topModule: tb_top
+  mainClock: $root.tb_top.core_clk
+  verilatorArgs: [
+    --autoflush
+  ]
+  testPrep: tests/prep.bash
+  testPost: tests/post.bash
+
+configurations:
+  default:
+    verilogIncdirs: [ src/default ]
+  hiperf:
+    verilogIncdirs: [ src/hiperf ]
+  asic:
+    verilogIncdirs: [ src/asic ]
+
+tests:
+  hello:
+  cmark:
+    executeArgs: [ +iterations=20 ]
+  cmark_iccm:
+    executeArgs: [ +iterations=50 ]
+  dhry:
+    executeArgs: [ +iterations=37000 ]
