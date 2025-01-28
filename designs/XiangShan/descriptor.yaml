@@ -1,0 +1,118 @@
+origin:
+  - repository: https://github.com/OpenXiangShan/XiangShan.git
+    revision: 8fae59bba57fd80fcd1d85aadbf87895b97d167a
+    license: https://github.com/OpenXiangShan/XiangShan/blob/8fae59bba57fd80fcd1d85aadbf87895b97d167a/LICENSE
+
+compile:
+  verilogSourceFiles:
+    - src/common/tb.v
+    - src/common/assert.v
+    - src/common/SimJTAG.v
+    - src/common/FlashHelper.v
+    - src/common/LogPerfHelper.v
+    - src/common/MemRWHelper.v
+    - src/common/SDCardHelper.v
+    - src/common/STD_CLKGT_func.v
+  verilogDefines:
+    PRINTF_COND: 0
+    VERILATOR_5: 1
+  cppSourceFiles:
+    - src/common/assert.cpp
+    - src/common/flash.cpp
+    - src/common/ram.cpp
+    - src/common/sdcard.cpp
+  cppIncludeFiles:
+    - src/common/common.h
+  topModule: tb
+  mainClock: $root.tb.clock
+
+execute:
+  common:
+    postHook: tests/post.bash
+  tests:
+    hello:
+      files:
+        - tests/hello/program.bin
+    cmark:
+      files:
+        - tests/cmark/program.bin
+      args:
+        - +iterations=1
+    dhry:
+      files:
+        - tests/dhry/program.bin
+      args:
+        - +iterations=975
+    microbench:
+      files:
+        - tests/microbench/program.bin
+      args:
+        - +iterations=1
+    linux:
+      files:
+        - tests/linux/program.bin
+      tags:
+        - long
+
+configurations:
+  mini-chisel6:
+    compile:
+      verilogSourceFiles:
+        - src/mini-chisel6/arrays.v
+        - src/mini-chisel6/constantin.v
+        - src/mini-chisel6/Difftest.v
+        - src/mini-chisel6/SimTop.v
+      cppSourceFiles:
+        - src/mini-chisel6/constantin.cpp
+    execute:
+      tests:
+        cmark:
+          tags: [ standard ]
+
+  default-chisel6:
+    compile:
+      verilogSourceFiles:
+        - src/default-chisel6/arrays.v
+        - src/default-chisel6/constantin.v
+        - src/default-chisel6/Difftest.v
+        - src/default-chisel6/SimTop1.v
+        - src/default-chisel6/SimTop2.v
+      cppSourceFiles:
+        - src/default-chisel6/constantin.cpp
+    execute:
+      common:
+        tags: [ large ]
+
+  mini-chisel3:
+    compile:
+      verilogSourceFiles:
+        - src/mini-chisel3/arrays.v
+        - src/mini-chisel3/constantin.v
+        - src/mini-chisel3/Difftest.v
+        - src/mini-chisel3/SimTop1.v
+        - src/mini-chisel3/SimTop2.v
+      cppSourceFiles:
+        - src/mini-chisel3/constantin.cpp
+      cppDefines:
+        NO_XS_ASSERT_BEFORE : 5
+    execute:
+      tests:
+        microbench:
+          tags: [ standard ]
+
+  default-chisel3:
+    compile:
+      verilogSourceFiles:
+        - src/default-chisel3/arrays.v
+        - src/default-chisel3/constantin.v
+        - src/default-chisel3/Difftest.v
+        - src/default-chisel3/SimTop1.v
+        - src/default-chisel3/SimTop2.v
+        - src/default-chisel3/SimTop3.v
+      cppSourceFiles:
+        - src/default-chisel3/constantin.cpp
+      cppDefines:
+        NO_XS_ASSERT_BEFORE : 5
+    execute:
+      common:
+        tags: [ large ]

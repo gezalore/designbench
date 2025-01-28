@@ -1,0 +1,138 @@
+# This is a JSON Schema used to validate design descriptors, written as YAML.
+# Top level properties starting with an underscore '_' are stripped before the
+# schema is applied, and are used to hold reusable fragments, which are merged
+# into the main body using the YAML '<<' merge operator, which is more generic
+# than JSON Schema $defs/$ref. Also you can write commentsin YAML ...
+
+# Descriptor for 'compile' step
+_CompileDescriptor: &CompileDescriptor
+    oneOf:
+        - type: "null"
+        - type: object
+          properties:
+            verilogSourceFiles:
+                type: array
+                items:
+                    type: string
+                uniqueItems: true
+            verilogIncludeFiles:
+                type: array
+                items:
+                    type: string
+                uniqueItems: true
+            verilogDefines:
+                type: object
+                additionalProperties:
+                    type:
+                        - string
+                        - number
+            cppSourceFiles:
+                type: array
+                items:
+                    type: string
+                uniqueItems: true
+            cppIncludeFiles:
+                type: array
+                items:
+                    type: string
+                uniqueItems: true
+            cppDefines:
+                type: object
+                additionalProperties:
+                    type:
+                        - string
+                        - number
+            topModule:
+                type: string
+            mainClock:
+                type: string
+            verilatorArgs:
+                type: array
+                items:
+                    type:
+                        - string
+                        - number
+            prepHook:
+                type: string
+            postHook:
+                type: string
+          additionalProperties: false
+
+# Descriptor for 'execute' step
+_ExecuteDescriptor: &ExecuteDescriptor
+    oneOf:
+        - type: "null"
+        - type: object
+          properties:
+            args:
+                type: array
+                items:
+                    type:
+                        - string
+                        - number
+            files:
+                type: array
+                items:
+                    type: string
+                uniqueItems: true
+            tags:
+                type: array
+                items:
+                    type: string
+                uniqueItems: true
+            prepHook:
+                type: string
+            postHook:
+                type: string
+          additionalProperties: false
+
+# All design properties
+_DesignProperties: &DesignProperties
+    compile:
+        << : *CompileDescriptor
+    execute:
+        type: object
+        properties:
+            common:
+                << : *ExecuteDescriptor
+            tests:
+                type: object
+                additionalProperties:
+                    << : *ExecuteDescriptor
+                minProperties: 1
+        additionalProperties: false
+
+# Schema for descriptor file root
+type: object
+properties:
+    origin:
+        type: array
+        items:
+            type: object
+            properties:
+                repository:
+                    type: string
+                revision:
+                    type: [ string, integer ]
+                license:
+                    type: string
+            required:
+                - repository
+                - revision
+                - license
+            additionalProperties: false
+        minItems: 1
+    << : *DesignProperties
+    configurations:
+        type: object
+        additionalProperties:
+            type: object
+            properties:
+                << : *DesignProperties
+            additionalProperties: false
+        minProperties: 1
+additionalProperties: false
+required:
+    - origin
+    - compile
+    - execute

@@ -1,0 +1,6 @@
+#!/bin/sh
+# Copyright (c) 2025, designbench contributors
+
+export DESIGNBENCH_ROOT=$(dirname $(readlink -f $0))
+export PYTHONPATH="${DESIGNBENCH_ROOT}/src:$PYTHONPATH"
+exec ${DESIGNBENCH_ROOT}/venv/bin/python3 -m src.main "$@"

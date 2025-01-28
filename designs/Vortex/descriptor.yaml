@@ -1,0 +1,226 @@
+origin:
+  - repository: https://github.com/vortexgpgpu/vortex.git
+    revision: e80ee2c81909ecf118fa1b8842613af4b26ab4a1
+    license: https://github.com/vortexgpgpu/vortex/blob/e86eeab8eacd52bc34e3cf084796468a229ddcaa/LICENSE
+  - repository: https://github.com/pulp-platform/fpnew.git
+    revision: 79e453139072df42c9ec8f697132ba485d74e23d
+    license: https://github.com/openhwgroup/cvfpu/blob/79e453139072df42c9ec8f697132ba485d74e23d/LICENSE.apache
+
+compile:
+  verilogSourceFiles:
+    - src/VX_gpu_pkg.sv
+    - src/VX_fpu_pkg.sv
+    - src/VX_trace_pkg.sv
+    - src/fpnew/fpnew_pkg.sv
+    - src/fpnew/cf_math_pkg.sv
+    - src/fpnew/defs_div_sqrt_mvp.sv
+    - src/fpnew/control_mvp.sv
+    - src/tb.sv
+    - src/Vortex.sv
+    - src/VX_dcr_bus_if.sv
+    - src/VX_mem_bus_if.sv
+    - src/VX_cache_wrap.sv
+    - src/VX_cluster.sv
+    - src/VX_pipe_register.sv
+    - src/VX_reset_relay.sv
+    - src/VX_cache_bypass.sv
+    - src/VX_socket.sv
+    - src/VX_bits_remove.sv
+    - src/VX_cache_cluster.sv
+    - src/VX_core.sv
+    - src/VX_elastic_buffer.sv
+    - src/VX_generic_arbiter.sv
+    - src/VX_mem_arb.sv
+    - src/VX_lsu_mem_if.sv
+    - src/VX_bits_insert.sv
+    - src/VX_branch_ctl_if.sv
+    - src/VX_cache.sv
+    - src/VX_commit.sv
+    - src/VX_commit_csr_if.sv
+    - src/VX_commit_if.sv
+    - src/VX_commit_sched_if.sv
+    - src/VX_dcr_data.sv
+    - src/VX_decode.sv
+    - src/VX_decode_if.sv
+    - src/VX_decode_sched_if.sv
+    - src/VX_dispatch_if.sv
+    - src/VX_execute.sv
+    - src/VX_fetch.sv
+    - src/VX_fetch_if.sv
+    - src/VX_issue.sv
+    - src/VX_lmem_unit.sv
+    - src/VX_lsu_adapter.sv
+    - src/VX_mem_coalescer.sv
+    - src/VX_priority_arbiter.sv
+    - src/VX_rr_arbiter.sv
+    - src/VX_sched_csr_if.sv
+    - src/VX_schedule.sv
+    - src/VX_schedule_if.sv
+    - src/VX_skid_buffer.sv
+    - src/VX_stream_arb.sv
+    - src/VX_stream_switch.sv
+    - src/VX_warp_ctl_if.sv
+    - src/VX_writeback_if.sv
+    - src/VX_alu_unit.sv
+    - src/VX_cache_bank.sv
+    - src/VX_cache_flush.sv
+    - src/VX_dp_ram.sv
+    - src/VX_fair_arbiter.sv
+    - src/VX_fpu_csr_if.sv
+    - src/VX_fpu_unit.sv
+    - src/VX_index_buffer.sv
+    - src/VX_issue_slice.sv
+    - src/VX_local_mem.sv
+    - src/VX_lsu_unit.sv
+    - src/VX_lzc.sv
+    - src/VX_onehot_encoder.sv
+    - src/VX_pending_size.sv
+    - src/VX_pipe_buffer.sv
+    - src/VX_popcount.sv
+    - src/VX_priority_encoder.sv
+    - src/VX_reduce.sv
+    - src/VX_sfu_unit.sv
+    - src/VX_split_join.sv
+    - src/VX_stream_buffer.sv
+    - src/VX_stream_pack.sv
+    - src/VX_stream_unpack.sv
+    - src/VX_stream_xbar.sv
+    - src/VX_execute_if.sv
+    - src/VX_allocator.sv
+    - src/VX_alu_int.sv
+    - src/VX_alu_muldiv.sv
+    - src/VX_bank_flush.sv
+    - src/VX_cache_data.sv
+    - src/VX_cache_mshr.sv
+    - src/VX_cache_tags.sv
+    - src/VX_csr_unit.sv
+    - src/VX_dispatch_unit.sv
+    - src/VX_fifo_queue.sv
+    - src/VX_find_first.sv
+    - src/VX_fpu_fpnew.sv
+    - src/VX_gather_unit.sv
+    - src/VX_ibuffer_if.sv
+    - src/VX_lsu_slice.sv
+    - src/VX_scan.sv
+    - src/VX_sp_ram.sv
+    - src/VX_wctl_unit.sv
+    - src/VX_csr_data.sv
+    - src/VX_dispatch.sv
+    - src/VX_elastic_adapter.sv
+    - src/VX_ibuffer.sv
+    - src/VX_ipdom_stack.sv
+    - src/VX_mem_scheduler.sv
+    - src/VX_multiplier.sv
+    - src/VX_operands.sv
+    - src/VX_operands_if.sv
+    - src/VX_scoreboard.sv
+    - src/VX_scoreboard_if.sv
+    - src/VX_serial_div.sv
+    - src/VX_shift_register.sv
+    - src/fpnew/fpnew_top.sv
+    - src/fpnew/fpnew_opgroup_block.sv
+    - src/fpnew/rr_arb_tree.sv
+    - src/fpnew/fpnew_opgroup_fmt_slice.sv
+    - src/fpnew/fpnew_opgroup_multifmt_slice.sv
+    - src/fpnew/lzc.sv
+    - src/fpnew/fpnew_cast_multi.sv
+    - src/fpnew/fpnew_divsqrt_multi.sv
+    - src/fpnew/fpnew_fma.sv
+    - src/fpnew/fpnew_noncomp.sv
+    - src/fpnew/div_sqrt_top_mvp.sv
+    - src/fpnew/fpnew_classifier.sv
+    - src/fpnew/fpnew_rounding.sv
+    - src/fpnew/norm_div_sqrt_mvp.sv
+    - src/fpnew/nrbd_nrsc_mvp.sv
+    - src/fpnew/preprocess_mvp.sv
+    - src/fpnew/iteration_div_sqrt_mvp.sv
+  verilogIncludeFiles:
+    - src/VX_cache_define.vh
+    - src/VX_config.vh
+    - src/VX_define.vh
+    - src/VX_fpu_define.vh
+    - src/VX_platform.vh
+    - src/VX_scope.vh
+    - src/VX_types.vh
+    - src/fpnew/registers.svh
+  verilogDefines:
+    SIMULATION: 1
+    XLEN_32: 1
+    FPU_FPNEW: 1
+    NDEBUG: 1
+  cppSourceFiles:
+    - src/dpi/memory.cpp
+  topModule: tb
+  mainClock: $root.tb.clk
+  verilatorArgs:
+    - -Wno-BLKANDNBLK
+    - --autoflush
+
+execute:
+  common:
+    postHook: tests/post.bash
+  tests:
+    hello:
+      files:
+        - tests/hello/dcrs.bin
+        - tests/hello/init.bin
+        - tests/hello/post.bin
+    sgemm:
+      files:
+        - tests/sgemm/dcrs.bin
+        - tests/sgemm/init.bin
+        - tests/sgemm/post.bin
+    saxpy:
+      files:
+        - tests/saxpy/dcrs.bin
+        - tests/saxpy/init.bin
+        - tests/saxpy/post.bin
+
+configurations:
+  mini:
+    compile:
+      verilogDefines:
+        NUM_CLUSTERS: 1
+        NUM_CORES: 1
+        NUM_WARPS: 4
+        NUM_THREADS: 4
+    execute:
+      tests:
+        hello:
+          tags: [ sanity ]
+        sgemm:
+          args: [ +iterations=3 ]
+          tags: [ standard ]
+        saxpy:
+          args: [ +iterations=3 ]
+
+  sane:
+    compile:
+      verilogDefines:
+        NUM_CLUSTERS: 2
+        NUM_CORES: 4
+        NUM_WARPS: 4
+        NUM_THREADS: 8
+    execute:
+      tests:
+        sgemm:
+          args: [ +iterations=1 ]
+        saxpy:
+          args: [ +iterations=1 ]
+          tags: [ standard ]
+
+  huge:
+    compile:
+      verilogDefines:
+        NUM_CLUSTERS: 8
+        NUM_CORES: 8
+        NUM_WARPS: 8
+        NUM_THREADS: 8
+    execute:
+      common:
+        tags:  [ large, long, flaky ]
+      tests:
+        sgemm:
+          args: [ +iterations=1 ]
+        saxpy:
+          args: [ +iterations=1 ]
