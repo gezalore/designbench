@@ -13,7 +13,7 @@ TAGS: Final[Dict[str, str]] = {
     "sanity"    : "Very short cases suitable for quick functional sanity checking",
     "standard"  : "Standard set of cases suitable for baseline performance evaluation",
     "large"     : "Large cases that compile for a fairly long time ",
-    "long"      : "Long that execute for a fairly long time",
+    "long"      : "Cases that execute for a fairly long time",
     "flaky"     : "Cases that might fail intermittently"
 }
 # fmt: on

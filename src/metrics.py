@@ -69,8 +69,15 @@ def metricDef(metric: Metric) -> MetricDef:
     return METRICS[metric]
 
 
+@final
+@dataclass(frozen=True)
+class Sample:
+    value: float # value of sample
+    file: str # Metrics file the sample came from
+
+
 # Metrics are stored as a map from 'case' to 'step' to 'metric' to list of samples
-type Metrics = Dict[str, Dict[Step, Dict[Metric, List[float]]]]
+type Metrics = Dict[str, Dict[Step, Dict[Metric, List[Sample]]]]
 
 
 # Read all metrics from the given working directory.
@@ -101,7 +108,7 @@ def readAll(rootDir: str) -> Metrics:
                     for step, stepData in caseData.items():
                         stepMetrics = caseMetrics.setdefault(step, {})
                         for metric, value in stepData.items():
-                            stepMetrics.setdefault(metric, []).append(value)
+                            stepMetrics.setdefault(metric, []).append(Sample(value, metricsFile))
         if bottom:
             return
         # Descend

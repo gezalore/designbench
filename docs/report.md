@@ -112,3 +112,9 @@ The actual measurements are stored in `_<STEP>/metrics.json` files under the
 working directory. It is safe to delete these, or whole subdirectories of the
 working directory in order to remove some measurements (maybe because they
 are too noisy).
+
+### Examining raw data
+
+You can use `./designbench rawdata`, which has an interface similar to
+`./designbench report`, but instead of displaying summary statistics, it shows
+individual measurements. This can be helpful for identifying outliers.

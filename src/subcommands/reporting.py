@@ -1,12 +1,14 @@
 # Copyright (c) 2025, designbench contributors
 
 import argparse
+import os
 import sys
-from typing import Final
+from typing import Any, Final, List
 
 import numpy as np
 import scipy.stats
 import tabulate
+from sklearn.neighbors import LocalOutlierFactor
 
 import metrics
 import misc
@@ -59,7 +61,7 @@ _TABLE_FORMAT: Final = tabulate.TableFormat(
 )
 
 
-def reportMain(args):
+def reportMain(args: argparse.Namespace) -> None:
     allData = metrics.readAll(args.dir)
 
     cases = sorted(set(args.cases + [_.rpartition(":")[0] for _ in args.cases]))
@@ -93,7 +95,7 @@ def reportMain(args):
             stepData = caseData[step]
             row = [case, len(stepData[availableMetrics[0]])]
             for i, metric in enumerate(availableMetrics):
-                mean, ci = meanAndConfidenceInterval(stepData[metric])
+                mean, ci = meanAndConfidenceInterval([_.value for _ in stepData[metric]])
                 row.append(formatMeanAndConfidenceInterval(mean, ci))
                 if (accumulate := mDefs[i].accumulate) is not None:
                     allRow[i] = accumulate(allRow[i], mean)
@@ -126,7 +128,7 @@ def reportMain(args):
         )
 
 
-def compareMain(args):
+def compareMain(args: argparse.Namespace) -> None:
     aAllData = metrics.readAll(args.aDir)
     bAllData = metrics.readAll(args.bDir)
 
@@ -136,7 +138,7 @@ def compareMain(args):
         print("No cases specified exist in both runs")
         sys.exit(0)
 
-    gainStyle = ("redBold", 0.9, "red", 0.95, "plain", 1.05, "green", 1.1, "greenBold")
+    gainStyle: Any = ("redBold", 0.9, "red", 0.95, "plain", 1.05, "green", 1.1, "greenBold")
     for step in args.steps:
         for metric in args.metrics:
             metricDef = metrics.metricDef(metric)
@@ -159,8 +161,8 @@ def compareMain(args):
                 )
                 if metric not in aStepData or metric not in bStepData:
                     continue
-                aData = aStepData[metric]
-                bData = bStepData[metric]
+                aData = [_.value for _ in aStepData[metric]]
+                bData = [_.value for _ in bStepData[metric]]
 
                 aN = len(aData)
                 bN = len(bData)
@@ -176,7 +178,6 @@ def compareMain(args):
                 gainStr = misc.styleByInterval(f"{gain:.2f}x", gain, *gainStyle)
                 gains.append(gain)
 
-                pVal = None
                 pValStr = ""
                 if aN >= 2 and bN >= 2:
                     # Need to handle degenerate cases where all samples are the same.
@@ -255,6 +256,73 @@ def compareMain(args):
                     tablefmt=_TABLE_FORMAT,
                     disable_numparse=True,
                     colalign=["left"] + ["right"] * (len(table[0]) - 1),
+                )
+            )
+
+
+def rawdataMain(args: argparse.Namespace) -> None:
+    allData = metrics.readAll(args.dir)
+
+    cases = sorted(set(args.cases + [_.rpartition(":")[0] for _ in args.cases]))
+
+    zIntervals: Any = ("plain", 1.0, "yellow", 2.0, "red", 3.0, "redBold")
+
+    for step in args.steps:
+        for metric in args.metrics:
+            # Build the table
+            table: List[list[str]] = []
+            for case in cases:
+                if case not in allData:
+                    continue
+                caseData = allData[case]
+                if step not in caseData:
+                    continue
+                stepData = caseData[step]
+                if metric not in stepData:
+                    continue
+
+                samples = stepData[metric]
+                n = len(samples)
+                # Make up some defautls that will display correctly if not enough samples
+                zscores = [None for _ in samples]
+                outlierVotes = [0 for _ in samples]
+                if n >= 2:
+                    zscores = scipy.stats.zscore(
+                        [_.value for _ in samples], ddof=1, nan_policy="raise"
+                    )
+                if n >= 4:
+                    # Add a bit of dithering to split quantized samples
+                    rng = np.random.default_rng(seed=9876)
+                    values = [[_.value + rng.normal(scale=1e-4)] for _ in samples]
+                    # Run with up to 9 neighborhood sizes
+                    minNeighbours = max(int(np.sqrt(n)), 3)
+                    maxNeighbours = n - 1
+                    for i in np.unique(np.linspace(minNeighbours, maxNeighbours, 9, dtype=int)):
+                        lof = LocalOutlierFactor(n_neighbors=i, algorithm="brute")
+                        for j, prediction in enumerate(lof.fit_predict(values)):
+                            if prediction == -1:
+                                outlierVotes[j] += 1
+
+                if table:
+                    table.append(tabulate.SEPARATING_LINE)
+                for s, z, o in zip(samples, zscores, outlierVotes):
+                    vStr = misc.styleByInterval(f"{s.value:0.2f}", np.abs(z or 0.0), *zIntervals)
+                    zStr = f"{z:0.3f}" if z is not None else ""
+                    table.append([case, vStr, zStr, "+" * o, os.path.relpath(s.file, args.dir)])
+
+            if not table:
+                continue
+
+            # Print the table
+            print()
+            print(misc.styled(f"{step} - {metrics.metricDef(metric).header}", style="bold"))
+            print(
+                tabulate.tabulate(
+                    table,
+                    headers=["Case", "Value", "Z-score", "Outlier", "Metrics file"],
+                    tablefmt=_TABLE_FORMAT,
+                    disable_numparse=True,
+                    colalign=["left", "right", "right", "right", "left"],
                 )
             )
 
@@ -338,4 +406,42 @@ def addSubcommands(subparsers) -> None:
         help="Working director of second run (B)",
         type=ArgExistingDirectory(),
         metavar="BDIR",
+    )
+
+    # Subcommand "rawdata"
+    rawdataParser: argparse.ArgumentParser = subparsers.add_parser(
+        "rawdata",
+        help="Display raw metrics gathered in working directory",
+        allow_abbrev=False,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    rawdataParser.set_defaults(entryPoint=rawdataMain)
+    rawdataParser.add_argument(
+        "--cases",
+        help="Report only the specified cases",
+        type=ArgPatternMatcher("cases", lambda: CTX.availableCases, casesByTag),
+        metavar="CASES",
+        default="*",
+    )
+    rawdataParser.add_argument(
+        "--metrics",
+        help="Metrics to report",
+        type=ArgPatternMatcher("metrics", metrics.METRICS.keys),
+        metavar="METRICS",
+        default="speed elapsed memory",
+    )
+    rawdataParser.add_argument(
+        "--steps",
+        help="Steps to report",
+        type=ArgPatternMatcher("steps", metrics.STEPS.keys),
+        metavar="STEPS",
+        default="verilate execute",
+    )
+    rawdataParser.add_argument(
+        "dir",
+        help="Work directory of run",
+        type=ArgExistingDirectory(),
+        default=CTX.defaultWorkDir,
+        metavar="DIR",
+        nargs="?",
     )
