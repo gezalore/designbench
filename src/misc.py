@@ -7,6 +7,8 @@ from typing import Any, Dict, Final, Generator, Literal, NoReturn
 
 import termcolor
 
+Format = Literal["ascii", "github"]
+
 Style = Literal[
     "plain",
     "bold",
@@ -47,9 +49,20 @@ _STYLE_TO_TERMCOLOR: Final[Dict[Style, Dict[str, Any]]] = {
 }
 # fmt: on
 
+_format: Format = "ascii"
+
+
+def setFormat(format: Format) -> None:
+    global _format  # pylint: disable=global-statement
+    _format = format
+
 
 def styled(text: str, style: Style = "plain") -> str:
-    return termcolor.colored(text, **_STYLE_TO_TERMCOLOR[style])
+    if _format == "ascii":
+        return termcolor.colored(text, **_STYLE_TO_TERMCOLOR[style])
+    if _format == "github":
+        return text
+    raise RuntimeError("unreachable")
 
 
 def echo(message: str, style: Style = "plain") -> None:
@@ -83,8 +96,8 @@ def styleByInterval(
         )
         assert prevLimit < limit, "Limits must be ascending"
         if value < limit:
-            return termcolor.colored(text, **_STYLE_TO_TERMCOLOR[style])
-    raise ValueError(f"limit {value} is not welld defined")
+            return styled(text, style)
+    raise ValueError(f"limit {value} is not well defined")
 
 
 @contextlib.contextmanager

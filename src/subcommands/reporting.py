@@ -16,6 +16,7 @@ from context import CTX
 from subcommands.common import ArgExistingDirectory, ArgPatternMatcher, casesByTag
 
 tabulate.PRESERVE_WHITESPACE = True
+tabulate.MIN_PADDING = 0
 
 
 # Returns sample mean and it's confidence interval (or mean and None if there is only 1 sample)
@@ -49,7 +50,7 @@ def formatMeanAndConfidenceInterval(mean, ci):
     return f"{meanStr} {ciStr}"
 
 
-_TABLE_FORMAT: Final = tabulate.TableFormat(
+_ASCII_TABLE_FORMAT: Final = tabulate.TableFormat(
     lineabove=tabulate.Line("╒═", "═", "═╤═", "═╕"),
     linebelowheader=tabulate.Line("╞═", "═", "═╪═", "═╡"),
     linebelow=tabulate.Line("╘═", "═", "═╧═", "═╛"),
@@ -60,8 +61,30 @@ _TABLE_FORMAT: Final = tabulate.TableFormat(
     with_header_hide=None,
 )
 
+_GITHUB_TABLE_FORMAT: Final = tabulate.TableFormat(
+    lineabove=tabulate.Line("|", "-", "|", "|"),
+    linebelowheader=tabulate.Line("|", "-", "|", "|"),
+    linebetweenrows=None,
+    linebelow=None,
+    headerrow=tabulate.DataRow("|", "|", "|"),
+    datarow=tabulate.DataRow("|", "|", "|"),
+    padding=1,
+    with_header_hide=["lineabove"],
+)
+
+
+def printTable(table: List[List[str]], format: misc.Format, **kwargs) -> None:
+    if format == "ascii":
+        print(tabulate.tabulate(table, tablefmt=_ASCII_TABLE_FORMAT, **kwargs))
+    elif format == "github":
+        print(tabulate.tabulate(table, tablefmt=_GITHUB_TABLE_FORMAT, **kwargs))
+    else:
+        raise RuntimeError("unreachable")
+
 
 def reportMain(args: argparse.Namespace) -> None:
+    misc.setFormat(args.format)
+
     allData = metrics.readAll(args.dir)
 
     cases = sorted(set(args.cases + [_.rpartition(":")[0] for _ in args.cases]))
@@ -83,7 +106,7 @@ def reportMain(args: argparse.Namespace) -> None:
             continue
 
         # Build the table
-        table = []
+        table: List[List[str]] = []
         mDefs = [metrics.metricDef(_) for _ in availableMetrics]
         allRow = [_.identityValue for _ in mDefs]
         for case in cases:
@@ -117,18 +140,18 @@ def reportMain(args: argparse.Namespace) -> None:
 
         print()
         print(misc.styled(step, style="bold"))
-        print(
-            tabulate.tabulate(
-                table,
-                headers=headers,
-                tablefmt=_TABLE_FORMAT,
-                disable_numparse=True,
-                colalign=["left"] + ["right"] * (len(headers) - 1),
-            )
+        printTable(
+            table,
+            args.format,
+            headers=headers,
+            disable_numparse=True,
+            colalign=["left"] + ["right"] * (len(headers) - 1),
         )
 
 
 def compareMain(args: argparse.Namespace) -> None:
+    misc.setFormat(args.format)
+
     aAllData = metrics.readAll(args.aDir)
     bAllData = metrics.readAll(args.bDir)
 
@@ -143,7 +166,7 @@ def compareMain(args: argparse.Namespace) -> None:
         for metric in args.metrics:
             metricDef = metrics.metricDef(metric)
             # Build the table
-            table = []
+            table: List[List[str]] = []
             gains = []
             sigGains = []
             for case in commonCases:
@@ -216,8 +239,8 @@ def compareMain(args: argparse.Namespace) -> None:
                 table.append(
                     [
                         case,
-                        len(aData),
-                        len(bData),
+                        str(len(aData)),
+                        str(len(bData)),
                         formatMeanAndConfidenceInterval(*meanAndConfidenceInterval(aData)),
                         formatMeanAndConfidenceInterval(*meanAndConfidenceInterval(bData)),
                         gainStr,
@@ -241,26 +264,26 @@ def compareMain(args: argparse.Namespace) -> None:
             hilo = "higher" if metricDef.higherIsBetter else "lower"
             print()
             print(misc.styled(f"{step} - {metricDef.header} - {hilo} is better", style="bold"))
-            print(
-                tabulate.tabulate(
-                    table,
-                    headers=[
-                        "Case",
-                        "#A",
-                        "#B",
-                        "Mean A",
-                        "Mean B",
-                        f"Gain ({'B/A' if metricDef.higherIsBetter else 'A/B'})",
-                        "p-value",
-                    ],
-                    tablefmt=_TABLE_FORMAT,
-                    disable_numparse=True,
-                    colalign=["left"] + ["right"] * (len(table[0]) - 1),
-                )
+            printTable(
+                table,
+                args.format,
+                headers=[
+                    "Case",
+                    "#A",
+                    "#B",
+                    "Mean A",
+                    "Mean B",
+                    f"Gain ({'B/A' if metricDef.higherIsBetter else 'A/B'})",
+                    "p-value",
+                ],
+                disable_numparse=True,
+                colalign=["left"] + ["right"] * (len(table[0]) - 1),
             )
 
 
 def rawdataMain(args: argparse.Namespace) -> None:
+    misc.setFormat(args.format)
+
     allData = metrics.readAll(args.dir)
 
     cases = sorted(set(args.cases + [_.rpartition(":")[0] for _ in args.cases]))
@@ -270,7 +293,7 @@ def rawdataMain(args: argparse.Namespace) -> None:
     for step in args.steps:
         for metric in args.metrics:
             # Build the table
-            table: List[list[str]] = []
+            table: List[List[str]] = []
             for case in cases:
                 if case not in allData:
                     continue
@@ -316,15 +339,30 @@ def rawdataMain(args: argparse.Namespace) -> None:
             # Print the table
             print()
             print(misc.styled(f"{step} - {metrics.metricDef(metric).header}", style="bold"))
-            print(
-                tabulate.tabulate(
-                    table,
-                    headers=["Case", "Value", "Z-score", "Outlier", "Metrics file"],
-                    tablefmt=_TABLE_FORMAT,
-                    disable_numparse=True,
-                    colalign=["left", "right", "right", "right", "left"],
-                )
+            printTable(
+                table,
+                args.format,
+                headers=["Case", "Value", "Z-score", "Outlier", "Metrics file"],
+                disable_numparse=True,
+                colalign=["left", "right", "right", "right", "left"],
             )
+
+
+def addCommonArgs(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--cases",
+        help="Report only the specified cases",
+        type=ArgPatternMatcher("cases", lambda: CTX.availableCases, casesByTag),
+        metavar="CASES",
+        default="*",
+    )
+    parser.add_argument(
+        "--format",
+        help="Output formatting, one of: %(choices)s",
+        metavar="FMT",
+        choices=["ascii", "github"],
+        default="ascii",
+    )
 
 
 def addSubcommands(subparsers) -> None:
@@ -336,13 +374,7 @@ def addSubcommands(subparsers) -> None:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     reportParser.set_defaults(entryPoint=reportMain)
-    reportParser.add_argument(
-        "--cases",
-        help="Report only the specified cases",
-        type=ArgPatternMatcher("cases", lambda: CTX.availableCases, casesByTag),
-        metavar="CASES",
-        default="*",
-    )
+    addCommonArgs(reportParser)
     reportParser.add_argument(
         "--metrics",
         help="Metrics to report",
@@ -374,13 +406,7 @@ def addSubcommands(subparsers) -> None:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     compareParser.set_defaults(entryPoint=compareMain)
-    compareParser.add_argument(
-        "--cases",
-        help="Compare only the specified cases",
-        type=ArgPatternMatcher("cases", lambda: CTX.availableCases, casesByTag),
-        metavar="CASES",
-        default="*",
-    )
+    addCommonArgs(compareParser)
     compareParser.add_argument(
         "--metrics",
         help="Metrics to compare",
@@ -416,13 +442,7 @@ def addSubcommands(subparsers) -> None:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     rawdataParser.set_defaults(entryPoint=rawdataMain)
-    rawdataParser.add_argument(
-        "--cases",
-        help="Report only the specified cases",
-        type=ArgPatternMatcher("cases", lambda: CTX.availableCases, casesByTag),
-        metavar="CASES",
-        default="*",
-    )
+    addCommonArgs(rawdataParser)
     rawdataParser.add_argument(
         "--metrics",
         help="Metrics to report",
