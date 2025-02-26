@@ -32,6 +32,7 @@ Metric = Literal[
     "user",
     "system",
     "speed",
+    "traceSize",
 ]
 
 
@@ -47,19 +48,21 @@ class MetricDef:
 
 # fmt: off
 METRICS: Final[Dict[Metric, MetricDef]] = {
-    "elapsed" : MetricDef("Elapsed time [s]",   operator.add,   0,    False,
-                          "Wall clock time elapsed during the step (time %e)"),
-    "user"    : MetricDef("CPU User [s]",       operator.add,   0,    False,
-                          "Cumulative CPU time used by the step in user mode (time %U)"),
-    "system"  : MetricDef("CPU System [s]",     operator.add,   0,    False,
-                          "Cumulative CPU time used by the step in kernel mode (time %S)"),
-    "cpu"     : MetricDef("CPU Total [s]",      operator.add,   0,    False,
-                          "Sum of CPU User + CPU System"),
-    "memory"  : MetricDef("Peak memory [MB]",   max,            0,    False,
-                          "Maximum resident set size durint the step (time %M)"),
-    "speed"   : MetricDef("Sim speed [kHz]",    None,           None, True,
-                          "Frequency of main clock during simulation "
-                          "(simulated cycle count / elapsed time)"),
+    "elapsed"   : MetricDef("Elapsed time [s]",     operator.add,   0,    False,
+                            "Wall clock time elapsed during the step (time %e)"),
+    "user"      : MetricDef("CPU User [s]",         operator.add,   0,    False,
+                            "Cumulative CPU time used by the step in user mode (time %U)"),
+    "system"    : MetricDef("CPU System [s]",       operator.add,   0,    False,
+                            "Cumulative CPU time used by the step in kernel mode (time %S)"),
+    "cpu"       : MetricDef("CPU Total [s]",        operator.add,   0,    False,
+                            "Sum of CPU User + CPU System"),
+    "memory"    : MetricDef("Peak memory [MB]",     max,            0,    False,
+                            "Maximum resident set size durint the step (time %M)"),
+    "speed"     : MetricDef("Sim speed [kHz]",      None,           None, True,
+                            "Frequency of main clock during simulation "
+                            "(simulated cycle count / elapsed time)"),
+    "traceSize" : MetricDef("Trace dump size [MB]", operator.add,   0,    False,
+                            "Size of trace dumps"),
 }
 #fmt : on
 

@@ -132,6 +132,19 @@ def execute(
             with open("_designbench_cycles.txt", "r", encoding="utf-8") as fd:
                 kiloCycles = int(fd.read()) / 1e3
                 tData["speed"] = kiloCycles / tData["elapsed"]
+            # Gather trace file size if present:
+            for tracePath in ("trace.vcd", "trace.fst"):
+                if not os.path.exists(tracePath):
+                    continue
+                traceSize = 0
+                if os.path.isdir(tracePath):
+                    for dirName, _, fileNames in os.walk(tracePath):
+                        for fileName in fileNames:
+                            traceSize += os.path.getsize(os.path.join(dirName, fileName))
+                else:
+                    traceSize = os.path.getsize(tracePath)
+                tData["traceSize"] = traceSize / (2**20)
+            # Write it out
             data = {descr.case: {step: tData}}
             with open(f"_{step}/metrics.json", "w", encoding="utf-8") as fd:
                 json.dump(data, fd)

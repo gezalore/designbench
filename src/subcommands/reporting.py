@@ -171,7 +171,7 @@ def compareMain(args: argparse.Namespace) -> None:
 
                 # Ignore cases with very small means (e.g.: example:* or *:hello)
                 # These would have a big effect on 'gain' and hide the truth
-                if aMean <= 1 or bMean <= 1:
+                if aMean <= 1e-3 or bMean <= 1e-3:
                     continue
 
                 gain = bMean / aMean if metricDef.higherIsBetter else aMean / bMean
