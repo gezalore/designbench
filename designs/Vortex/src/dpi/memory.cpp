@@ -39,7 +39,7 @@ static constexpr size_t PAGE_SIZE = 1 << PAGE_BITS;
 static constexpr size_t PAGE_MASK = PAGE_SIZE - 1;
 
 class Ram final {
-  std::unordered_map<uint64_t, std::unique_ptr<uint8_t>> m_pages;
+  std::unordered_map<uint64_t, std::unique_ptr<uint8_t[]>> m_pages;
   uint8_t* m_pagep = nullptr;
   uint64_t m_page_index = std::numeric_limits<uint64_t>::max();
 
