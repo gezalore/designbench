@@ -114,12 +114,16 @@ properties:
                     type: string
                 revision:
                     type: [ string, integer ]
-                license:
-                    type: string
+                licenses:
+                    type: array
+                    items:
+                        type: string
+                    uniqueItems: true
+                    minItems: 1
             required:
                 - repository
                 - revision
-                - license
+                - licenses
             additionalProperties: false
         minItems: 1
     << : *DesignProperties

@@ -1,7 +1,8 @@
 origin:
   - repository: https://github.com/chipsalliance/Cores-VeeR-EH1.git
     revision: 915fb34a5b38ef14c5d5c05431765ad8b912bc34
-    license: https://github.com/chipsalliance/Cores-VeeR-EH1/blob/915fb34a5b38ef14c5d5c05431765ad8b912bc34/LICENSE
+    licenses:
+      - LICENSE-VeeR-EH1
 
 compile:
   verilogSourceFiles:

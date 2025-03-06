@@ -1,7 +1,8 @@
 origin:
   - repository: local
     revision: local
-    license: local
+    licenses:
+      - ../../LICENSE
 
 compile:
   verilogSourceFiles:

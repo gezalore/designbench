@@ -86,9 +86,10 @@ def main(args: argparse.Namespace) -> None:
             continue
         doneDesign.add(design)
 
-        for item in CTX.descriptors[design]["origin"]:
+        yamlDescr = CTX.descriptors[design]
+        for item in yamlDescr["origin"]:
             repo = item["repository"]
-            license = item["license"]
+            licenses = item["licenses"]
             if repo != "local":
                 try:
                     with urllib.request.urlopen(repo):
@@ -96,13 +97,13 @@ def main(args: argparse.Namespace) -> None:
                 except urllib.error.URLError:
                     hasError = True
                     misc.error(f"{design} - Cannot open repository URL: {repo}")
-            if license != "local":
-                try:
-                    with urllib.request.urlopen(license):
-                        pass
-                except urllib.error.URLError:
-                    hasError = True
-                    misc.error(f"{design} - Cannot open license URL: {license}")
+            for license in licenses:
+                fileName = os.path.join(yamlDescr["designDir"], license)
+                usedFiles[cDescr.designDir].add(os.path.abspath(fileName))
+                if not os.path.exists(fileName):
+                    misc.error(f"{design} - License file does not exists: {fileName}")
+                elif not os.path.isfile(fileName):
+                    misc.error(f"{design} - License file does a file: {fileName}")
 
     for case in args.cases:
         eDescr = ExecuteDescriptor(case)

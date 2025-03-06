@@ -1,10 +1,12 @@
 origin:
   - repository: https://github.com/vortexgpgpu/vortex.git
     revision: e80ee2c81909ecf118fa1b8842613af4b26ab4a1
-    license: https://github.com/vortexgpgpu/vortex/blob/e86eeab8eacd52bc34e3cf084796468a229ddcaa/LICENSE
+    licenses:
+      - LICENSE-Vortex
   - repository: https://github.com/pulp-platform/fpnew.git
     revision: 79e453139072df42c9ec8f697132ba485d74e23d
-    license: https://github.com/openhwgroup/cvfpu/blob/79e453139072df42c9ec8f697132ba485d74e23d/LICENSE.apache
+    licenses:
+      - LICENSE-fpnew
 
 compile:
   verilogSourceFiles:

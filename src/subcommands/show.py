@@ -1,6 +1,7 @@
 # Copyright (c) 2025, designbench contributors
 
 import argparse
+import os
 from typing import Set
 
 import tabulate
@@ -36,14 +37,16 @@ def showDesigns(workRoot: str | None, showLicense: bool) -> None:
                 # Show source repositories
                 table.append([design if i == 0 else "", origin["repository"], origin["revision"]])
             else:
-                # Show licenses
-                table.append([design if i == 0 else "", origin["license"]])
+                for j, license in enumerate(origin["licenses"]):
+                    # Show licenses
+                    path = os.path.relpath(os.path.join(descr["designDir"], license))
+                    table.append([design if i == 0 and j == 0 else "", path])
         table.append(tabulate.SEPARATING_LINE)
     headers = ["Design"]
     if not showLicense:
         headers.extend(["Repositories", "Revision"])
     else:
-        headers.extend(["Licenses"])
+        headers.extend(["License files"])
     print(tabulate.tabulate(table, headers=headers, tablefmt="simple"))
 
 

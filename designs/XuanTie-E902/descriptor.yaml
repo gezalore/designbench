@@ -1,7 +1,8 @@
 origin:
   - repository: https://github.com/XUANTIE-RV/opene902.git
     revision: 991836411b405ac6a0a8d7668f2f5de6fa2a5b8c
-    license: https://github.com/XUANTIE-RV/opene902/blob/991836411b405ac6a0a8d7668f2f5de6fa2a5b8c/LICENSE
+    licenses:
+      - LICENSE-XuanTie-E902
 
 compile:
   verilogSourceFiles:

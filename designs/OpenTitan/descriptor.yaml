@@ -1,7 +1,8 @@
 origin:
   - repository: https://github.com/lowRISC/opentitan.git
     revision: a9e85dc63159e780b3640ecbfd965578deeb39b6
-    license: https://github.com/lowRISC/opentitan/blob/a9e85dc63159e780b3640ecbfd965578deeb39b6/LICENSE
+    licenses:
+      - LICENSE-OpenTitan
 
 compile:
   verilogSourceFiles:

@@ -34,24 +34,27 @@ The following are the top level entries that appear in a design descriptor.
 #### `origin` - required
 
 A sequence of source code repositories, with each item begin a mapping with
-properties `repository`, `revision`, and `license`. The `repository` and
-`license` must be internet accessible URLs to the canonical source repository,
-and the license document. `revision` is the version control identifier for the
-revision that was used as the base to import the desig. For Git, use a full
-40-digit SHA.
+properties `repository`, `revision`, and `licenses`. The `repository`
+must be an internet accessible URL to the canonical source repository.
+`revision` is the version control identifier for the revision that was used as
+the base to import the design. For Git, use a full 40-digit SHA. `licenses`
+is a sequence of file names, pointing to the license files of the repository,
+which must be imported as well.
 
 There must be at least one repository listed. If you include third party
 dependencies or submodules that either have a different copyright holder, or
 are licensed under a different license, then you must list every such
 dependency separately. There is no need to list submodules licensed under
 the same terms and copyright, if they are managed as part of version control.
-That is, whatever is listed here should be sufficient to reconstruct the source
-of the import (excluding modifications you made specifically for designbench),
+
+Whatever is listed here should be sufficient to reconstruct the source of the
+import (excluding modifications you made specifically for designbench),
 to audit its ownership.
 
 If you wish to include a design under the designbench license and copyright,
-you can set all of `repository`, `revision`, and `license` to the value
-'local'.
+you can set `repository` and `revision` to the value 'local' and point the
+`licenses` entry to the license file in the root of the designbench repository,
+see the 'Example' design.
 
 See the Example, OpenTitan, and Vortex designs for example.
 
