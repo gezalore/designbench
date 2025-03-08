@@ -261,9 +261,15 @@ def compareMain(args: argparse.Namespace) -> None:
                 table.append(["Geometric mean - pVal < 0.05", "", "", "", "", meanGainStr, ""])
 
             # Print the table
-            hilo = "higher" if metricDef.higherIsBetter else "lower"
+            hilo = (
+                "should be equal"
+                if metricDef.higherIsBetter is None
+                else "higher is better"
+                if metricDef.higherIsBetter
+                else "lower is better"
+            )
             print()
-            print(misc.styled(f"{step} - {metricDef.header} - {hilo} is better", style="bold"))
+            print(misc.styled(f"{step} - {metricDef.header} - {hilo}", style="bold"))
             printTable(
                 table,
                 args.format,

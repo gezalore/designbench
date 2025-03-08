@@ -130,7 +130,9 @@ def execute(
                 tData = json.load(fd)
             # Add design cycles
             with open("_designbench_cycles.txt", "r", encoding="utf-8") as fd:
-                kiloCycles = int(fd.read()) / 1e3
+                clocks = int(fd.read())
+                tData["clocks"] = clocks
+                kiloCycles = clocks / 1e3
                 tData["speed"] = kiloCycles / tData["elapsed"]
             # Gather trace file size if present:
             for tracePath in ("trace.vcd", "trace.fst"):

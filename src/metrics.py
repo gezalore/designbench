@@ -32,6 +32,7 @@ Metric = Literal[
     "user",
     "system",
     "speed",
+    "clocks",
     "traceSize",
 ]
 
@@ -42,7 +43,7 @@ class MetricDef:
     header: str  # Short descritpion usable a s a table header
     accumulate: Callable[[float, float], float] | None  # Accumulate 2 samples
     identityValue: float | None  # Identity element of 'accumulate'
-    higherIsBetter: bool  # Higher value is better
+    higherIsBetter: bool | None  # Higher value is better
     description: str  # More detailed description of metric
 
 
@@ -60,7 +61,10 @@ METRICS: Final[Dict[Metric, MetricDef]] = {
                             "Maximum resident set size durint the step (time %M)"),
     "speed"     : MetricDef("Sim speed [kHz]",      None,           None, True,
                             "Frequency of main clock during simulation "
-                            "(simulated cycle count / elapsed time)"),
+                            "(simulated clock cycles / elapsed time)"),
+    "clocks"    : MetricDef("Sim clock cycles",     operator.add,   0,    None,
+                            "Number of simulated main clock cycles "
+                            "(deterministic, for sanity checking only)"),
     "traceSize" : MetricDef("Trace dump size [MB]", operator.add,   0,    False,
                             "Size of trace dumps"),
 }
