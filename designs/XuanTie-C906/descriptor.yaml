@@ -235,7 +235,6 @@ compile:
     - src/csky_apb_1tox_matrix.v
     - src/fpga_ram.v
     - src/gated_clk_cell.v
-    - src/mp_top_golden_port.v
     - src/multiplier_33x33_partial.v
     - src/openC906.v
     - src/plic_32to1_arb.v

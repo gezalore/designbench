@@ -8,7 +8,6 @@ compile:
   verilogSourceFiles:
     - src/cpu_cfig.h
     - src/tb.v
-    - src/clic_kid_golden_ports.v
     - src/cr_ahbl_if.v
     - src/cr_ahbl_req_arb.v
     - src/cr_bmu_dbus_if.v

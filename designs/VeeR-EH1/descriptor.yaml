@@ -47,8 +47,6 @@ compile:
     - src/rvjtag_tap.sv
     - src/beh_lib.sv
     - src/mem_lib.sv
-    - src/ahb_to_axi4.sv
-    - src/axi4_to_ahb.sv
     - src/tb_top.sv
     - src/ahb_sif.sv
   verilogIncludeFiles:
