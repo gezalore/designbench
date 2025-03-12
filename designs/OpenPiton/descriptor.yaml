@@ -1,0 +1,509 @@
+
+origin:
+  - repository: https://github.com/PrincetonUniversity/openpiton.git
+    revision: d00933848245a9aac3dbd6b28a88d0e9ba7cd08d
+    licenses:
+      - LICENSE-OpenPiton
+      - LICENSE-OpenSPARCT1
+  - repository: https://github.com/pulp-platform/ariane.git
+    revision: 4c01614f83cd9dd91d115aa190bd4fc6a284b59e
+    licenses:
+      - LICENSE-Ariane
+  - repository: https://github.com/pulp-platform/rv_plic.git
+    revision: 5b5c5a4c1c15c3d7bb833071d344b2c2bc5f599d
+    licenses:
+      - LICENSE-rv_plic
+
+compile:
+  verilogSourceFiles:
+    - src/common/config.v
+    # Packages
+    - src/ariane/cv64a6_imafdc_sv39_openpiton_config_pkg.sv
+    - src/ariane/riscv_pkg.sv
+    - src/ariane/dm_pkg.sv
+    - src/ariane/ariane_pkg.sv
+    - src/ariane/ariane_soc_pkg.sv
+    - src/ariane/axi_pkg.sv
+    - src/ariane/ariane_axi_pkg.sv
+    - src/ariane/wt_cache_pkg.sv
+    - src/ariane/fpnew_pkg.sv
+    - src/ariane/cvxif_pkg.sv
+    - src/ariane/cf_math_pkg.sv
+    - src/ariane/instr_tracer_pkg.sv
+    - src/ariane/cvxif_instr_pkg.sv
+    - src/ariane/rv_plic_reg_pkg.sv
+    - src/ariane/defs_div_sqrt_mvp.sv
+    # OpenPiton common
+    - src/common/top.v
+    - src/common/async_fifo.v
+    - src/common/bootrom_linux.sv
+    - src/common/bootrom.sv
+    - src/common/bus_compare_equal.v
+    - src/common/chip_bridge_rcv_32.v
+    - src/common/chip_bridge_send_32.v
+    - src/common/chip_bridge.v
+    - src/common/chip_net_chooser_32.v
+    - src/common/chipset.v
+    - src/common/clk_gating_latch.v
+    - src/common/clk_mux.v
+    - src/common/clk_se_to_diff.v
+    - src/common/credit_to_valrdy.v
+    - src/common/dynamic_input_control.v
+    - src/common/dynamic_input_route_request_calc.v
+    - src/common/dynamic_input_top_16.v
+    - src/common/dynamic_input_top_4.v
+    - src/common/dynamic_node_top.v
+    - src/common/dynamic_node_top_wrap.v
+    - src/common/dynamic_output_control.v
+    - src/common/dynamic_output_datapath.v
+    - src/common/dynamic_output_top.v
+    - src/common/fake_mem_ctrl.v
+    - src/common/fake_pll.v
+    - src/common/fake_uart.v
+    - src/common/flip_bus.v
+    - src/common/fpga_bridge_rcv_32.v
+    - src/common/fpga_bridge_send_32.v
+    - src/common/fpga_bridge.v
+    - src/common/fpga_net_chooser_32.v
+    - src/common/io_xbar_bus_compare_equal.v
+    - src/common/io_xbar_flip_bus.v
+    - src/common/io_xbar_net_dff.v
+    - src/common/io_xbar_space_avail_top.v
+    - src/common/jtag_ctap.v
+    - src/common/jtag_interface_tap.v
+    - src/common/jtag_interface.v
+    - src/common/jtag_ucb_receiver.v
+    - src/common/jtag_ucb_transmitter.v
+    - src/common/jtag.v
+    - src/common/l15.v
+    - src/common/l15_wrap.v
+    - src/common/l2_amo_alu.v
+    - src/common/l2_broadcast_counter.v
+    - src/common/l2_broadcast_counter_wrap.v
+    - src/common/l2_config_regs.v
+    - src/common/l2_data.v
+    - src/common/l2_data_wrap.v
+    - src/common/l2_decoder.v
+    - src/common/l2_dir.v
+    - src/common/l2_dir_wrap.v
+    - src/common/l2_encoder.v
+    - src/common/l2_mshr_decoder.v
+    - src/common/l2_pipe1.v
+    - src/common/l2_pipe2.v
+    - src/common/l2_smc_wrap.v
+    - src/common/l2_state_wrap.v
+    - src/common/l2_tag.v
+    - src/common/l2_tag_wrap.v
+    - src/common/l2.v
+    - src/common/nc_inv_chk.v
+    - src/common/net_dff.v
+    - src/common/network_input_blk_multi_out.v
+    - src/common/noc1encoder.v
+    - src/common/noc2decoder.v
+    - src/common/noc3buffer.v
+    - src/common/noc3encoder.v
+    - src/common/noc_axilite_bridge.v
+    - src/common/OCI.v
+    - src/common/one_of_eight.v
+    - src/common/one_of_five.v
+    - src/common/pll_top.v
+    - src/common/rtap_ucb_receiver.v
+    - src/common/rtap_ucb_transmitter.v
+    - src/common/rtap.v
+    - src/common/simplenocbuffer.v
+    - src/common/space_avail_top.v
+    - src/common/swrvr_clib.v
+    - src/common/sync_fifo.v
+    - src/common/synchronizer.v
+    - src/common/system.v
+    - src/common/ucb_bus_in.v
+    - src/common/ucb_bus_out.v
+    - src/common/valrdy_to_credit.v
+    # OpenPiton common - generated
+    - src/common/config_regs.tmp.v
+    - src/common/dmbr.tmp.v
+    - src/common/io_xbar_input_control.tmp.v
+    - src/common/io_xbar_input_route_request_calc.tmp.v
+    - src/common/io_xbar_input_top_4.tmp.v
+    - src/common/io_xbar_one_of_n_plus_3.tmp.v
+    - src/common/io_xbar_one_of_n.tmp.v
+    - src/common/io_xbar_output_control.tmp.v
+    - src/common/io_xbar_output_datapath.tmp.v
+    - src/common/io_xbar_output_top.tmp.v
+    - src/common/io_xbar_top.tmp.v
+    - src/common/io_xbar_top_wrap.tmp.v
+    - src/common/l15_csm.tmp.v
+    - src/common/l15_hmc.tmp.v
+    - src/common/l15_mshr.tmp.v
+    - src/common/l15_pipeline.tmp.v
+    - src/common/l15_priority_encoder.tmp.v
+    - src/common/l2_data_ecc.tmp.v
+    - src/common/l2_data_pgen.tmp.v
+    - src/common/l2_mshr_wrap.tmp.v
+    - src/common/l2_pipe1_buf_in.tmp.v
+    - src/common/l2_pipe1_buf_out.tmp.v
+    - src/common/l2_pipe1_dpath.tmp.v
+    - src/common/l2_pipe2_buf_in.tmp.v
+    - src/common/l2_pipe2_ctrl.tmp.v
+    - src/common/l2_pipe2_dpath.tmp.v
+    - src/common/l2_smc.tmp.v
+    - src/common/monitor.tmp.v
+    - src/common/noc1buffer.tmp.v
+    - src/common/packet_filter.tmp.v
+    - src/common/rf_l15_lrsc_flag.tmp.v
+    - src/common/rf_l15_lruarray.tmp.v
+    - src/common/rf_l15_mesi.tmp.v
+    - src/common/rf_l15_wmt.tmp.v
+    - src/common/sram_l15_data.tmp.v
+    - src/common/sram_l15_hmt.tmp.v
+    - src/common/sram_l15_tag.tmp.v
+    - src/common/sram_l2_data.tmp.v
+    - src/common/sram_l2_dir.tmp.v
+    - src/common/sram_l2_state.tmp.v
+    - src/common/sram_l2_tag.tmp.v
+    - src/common/tile.tmp.v
+    # Ariane
+    - src/ariane/alu.sv
+    - src/ariane/amo_buffer.sv
+    - src/ariane/ariane_regfile_ff.sv
+    - src/ariane/ariane.sv
+    - src/ariane/ariane_verilog_wrap.sv
+    - src/ariane/axi2mem.sv
+    - src/ariane/axi_intf.sv
+    - src/ariane/axi_lite_interface.sv
+    - src/ariane/bht.sv
+    - src/ariane/branch_unit.sv
+    - src/ariane/btb.sv
+    - src/ariane/cdc_2phase.sv
+    - src/ariane/clint.sv
+    - src/ariane/cluster_clk_cells.sv
+    - src/ariane/commit_stage.sv
+    - src/ariane/compressed_decoder.sv
+    - src/ariane/controller.sv
+    - src/ariane/control_mvp.sv
+    - src/ariane/counter.sv
+    - src/ariane/csr_buffer.sv
+    - src/ariane/csr_regfile.sv
+    - src/ariane/cva6_icache.sv
+    - src/ariane/cva6.sv
+    - src/ariane/cvxif_example_coprocessor.sv
+    - src/ariane/cvxif_fu.sv
+    - src/ariane/debug_rom.sv
+    - src/ariane/decoder.sv
+    - src/ariane/delta_counter.sv
+    - src/ariane/div_sqrt_top_mvp.sv
+    - src/ariane/dm_csrs.sv
+    - src/ariane/dmi_cdc.sv
+    - src/ariane/dmi_jtag.sv
+    - src/ariane/dmi_jtag_tap.sv
+    - src/ariane/dm_mem.sv
+    - src/ariane/dm_sba.sv
+    - src/ariane/dm_top.sv
+    - src/ariane/exp_backoff.sv
+    - src/ariane/ex_stage.sv
+    - src/ariane/fifo_v2.sv
+    - src/ariane/fifo_v3.sv
+    - src/ariane/fpnew_cast_multi.sv
+    - src/ariane/fpnew_classifier.sv
+    - src/ariane/fpnew_divsqrt_multi.sv
+    - src/ariane/fpnew_fma_multi.sv
+    - src/ariane/fpnew_fma.sv
+    - src/ariane/fpnew_noncomp.sv
+    - src/ariane/fpnew_opgroup_block.sv
+    - src/ariane/fpnew_opgroup_fmt_slice.sv
+    - src/ariane/fpnew_opgroup_multifmt_slice.sv
+    - src/ariane/fpnew_rounding.sv
+    - src/ariane/fpnew_top.sv
+    - src/ariane/fpu_wrap.sv
+    - src/ariane/frontend.sv
+    - src/ariane/id_stage.sv
+    - src/ariane/instr_decoder.sv
+    - src/ariane/instr_queue.sv
+    - src/ariane/instr_realign.sv
+    - src/ariane/instr_scan.sv
+    - src/ariane/instr_tracer_if.sv
+    - src/ariane/instr_tracer.sv
+    - src/ariane/issue_read_operands.sv
+    - src/ariane/issue_stage.sv
+    - src/ariane/iteration_div_sqrt_mvp.sv
+    - src/ariane/lfsr.sv
+    - src/ariane/load_store_unit.sv
+    - src/ariane/load_unit.sv
+    - src/ariane/lsu_bypass.sv
+    - src/ariane/lzc.sv
+    - src/ariane/mmu.sv
+    - src/ariane/multiplier.sv
+    - src/ariane/mult.sv
+    - src/ariane/norm_div_sqrt_mvp.sv
+    - src/ariane/nrbd_nrsc_mvp.sv
+    - src/ariane/perf_counters.sv
+    - src/ariane/plic_regmap.sv
+    - src/ariane/plic_top.sv
+    - src/ariane/pmp_entry.sv
+    - src/ariane/pmp.sv
+    - src/ariane/popcount.sv
+    - src/ariane/preprocess_mvp.sv
+    - src/ariane/ptw.sv
+    - src/ariane/pulp_clk_cells.sv
+    - src/ariane/ras.sv
+    - src/ariane/re_name.sv
+    - src/ariane/riscv_peripherals.sv
+    - src/ariane/rrarbiter.sv
+    - src/ariane/rr_arb_tree.sv
+    - src/ariane/rv_plic_gateway.sv
+    - src/ariane/rv_plic_target.sv
+    - src/ariane/scoreboard.sv
+    - src/ariane/serdiv.sv
+    - src/ariane/shift_reg.sv
+    - src/ariane/sram.sv
+    - src/ariane/store_buffer.sv
+    - src/ariane/store_unit.sv
+    - src/ariane/tc_clk.sv
+    - src/ariane/tc_sram.sv
+    - src/ariane/tc_sram_wrapper.sv
+    - src/ariane/tlb.sv
+    - src/ariane/unread.sv
+    - src/ariane/wt_cache_subsystem.sv
+    - src/ariane/wt_dcache_ctrl.sv
+    - src/ariane/wt_dcache_mem.sv
+    - src/ariane/wt_dcache_missunit.sv
+    - src/ariane/wt_dcache.sv
+    - src/ariane/wt_dcache_wbuffer.sv
+    - src/ariane/wt_l15_adapter.sv
+  verilogIncludeFiles:
+    # OpenPiton common
+    - src/common/sys.h
+    - src/common/iop.h
+    - src/common/mc_define.h
+    - src/common/chipset_define.vh
+    - src/common/jtag.vh
+    - src/common/piton_system.vh
+    - src/common/uart16550_define.vh
+    - src/common/dmbr_define.v
+    - src/common/network_define.v
+    # OpenPiton common - generated
+    - src/common/ifu.tmp.h
+    - src/common/l15.tmp.h
+    - src/common/lsu.tmp.h
+    # Ariane
+    - src/ariane/assign.svh
+    - src/ariane/registers.svh
+    - src/ariane/typedef.svh
+  verilogDefines:
+    PITON_DPI: 1
+    DSYNC_MUX: 1
+  cppSourceFiles:
+    - src/common/iob_main.cc
+  topModule: cmp_top
+  mainClock: $root.cmp_top.core_ref_clk
+  verilatorArgs:
+    - --autoflush
+    - -Wno-BLKANDNBLK
+
+execute:
+  common:
+    postHook: tests/post.bash
+    args:
+      - +good_trap0=80000220
+      - +bad_trap0=80000200
+  tests:
+    hello:
+      files:
+        - tests/hello/mem.bin
+    token:
+      files:
+        - tests/token/mem.bin
+    fib:
+      files:
+        - tests/fib/mem.bin
+    dhry:
+      files:
+        - tests/dhry/mem.bin
+
+configurations:
+  1x1:
+    compile:
+      verilogSourceFiles:
+        - src/1x1/chipset_impl.tmp.v
+        - src/1x1/chip.tmp.v
+        - src/1x1/ciop_iob.tmp.v
+        - src/1x1/flat_id_to_xy.tmp.v
+        - src/1x1/l15_home_encoder.tmp.v
+        - src/1x1/l2_pipe1_ctrl.tmp.v
+        - src/1x1/l2_priority_encoder.tmp.v
+        - src/1x1/l2_state.tmp.v
+        - src/1x1/pc_cmp.tmp.v
+        - src/1x1/xy_to_flat_id.tmp.v
+      verilogIncludeFiles:
+        - src/1x1/cross_module.tmp.h
+        - src/1x1/define.tmp.h
+        - src/1x1/l2.tmp.h
+    execute:
+      common:
+        args:
+          - +nCores=1
+      tests:
+        token:
+          args:
+            - +iterations=1100
+        fib:
+          args:
+            - +iterations=900
+        dhry:
+          args:
+            - +iterations=6200
+  2x2:
+    compile:
+      verilogSourceFiles:
+        - src/2x2/chipset_impl.tmp.v
+        - src/2x2/chip.tmp.v
+        - src/2x2/ciop_iob.tmp.v
+        - src/2x2/flat_id_to_xy.tmp.v
+        - src/2x2/l15_home_encoder.tmp.v
+        - src/2x2/l2_pipe1_ctrl.tmp.v
+        - src/2x2/l2_priority_encoder.tmp.v
+        - src/2x2/l2_state.tmp.v
+        - src/2x2/pc_cmp.tmp.v
+        - src/2x2/xy_to_flat_id.tmp.v
+      verilogIncludeFiles:
+        - src/2x2/cross_module.tmp.h
+        - src/2x2/define.tmp.h
+        - src/2x2/l2.tmp.h
+    execute:
+      common:
+        args:
+          - +nCores=4
+      tests:
+        token:
+          args:
+            - +iterations=110
+        fib:
+          args:
+            - +iterations=162
+        dhry:
+          args:
+            - +iterations=1700
+  4x4:
+    compile:
+      verilogSourceFiles:
+        - src/4x4/chipset_impl.tmp.v
+        - src/4x4/chip.tmp.v
+        - src/4x4/ciop_iob.tmp.v
+        - src/4x4/flat_id_to_xy.tmp.v
+        - src/4x4/l15_home_encoder.tmp.v
+        - src/4x4/l2_pipe1_ctrl.tmp.v
+        - src/4x4/l2_priority_encoder.tmp.v
+        - src/4x4/l2_state.tmp.v
+        - src/4x4/pc_cmp.tmp.v
+        - src/4x4/xy_to_flat_id.tmp.v
+      verilogIncludeFiles:
+        - src/4x4/cross_module.tmp.h
+        - src/4x4/define.tmp.h
+        - src/4x4/l2.tmp.h
+    execute:
+      common:
+        args:
+          - +nCores=16
+      tests:
+        token:
+          args:
+            - +iterations=3
+        fib:
+          args:
+            - +iterations=6
+        dhry:
+          args:
+            - +iterations=2
+  8x8:
+    compile:
+      verilogSourceFiles:
+        - src/8x8/chipset_impl.tmp.v
+        - src/8x8/chip.tmp.v
+        - src/8x8/ciop_iob.tmp.v
+        - src/8x8/flat_id_to_xy.tmp.v
+        - src/8x8/l15_home_encoder.tmp.v
+        - src/8x8/l2_pipe1_ctrl.tmp.v
+        - src/8x8/l2_priority_encoder.tmp.v
+        - src/8x8/l2_state.tmp.v
+        - src/8x8/pc_cmp.tmp.v
+        - src/8x8/xy_to_flat_id.tmp.v
+      verilogIncludeFiles:
+        - src/8x8/cross_module.tmp.h
+        - src/8x8/define.tmp.h
+        - src/8x8/l2.tmp.h
+    execute:
+      common:
+        args:
+          - +nCores=64
+      tests:
+        token:
+          args:
+            - +iterations=1
+        fib:
+          args:
+            - +iterations=1
+        dhry:
+          args:
+            - +iterations=1
+  16x16:
+    compile:
+      verilogSourceFiles:
+        - src/16x16/chipset_impl.tmp.v
+        - src/16x16/chip.tmp.v
+        - src/16x16/ciop_iob.tmp.v
+        - src/16x16/flat_id_to_xy.tmp.v
+        - src/16x16/l15_home_encoder.tmp.v
+        - src/16x16/l2_pipe1_ctrl.tmp.v
+        - src/16x16/l2_priority_encoder.tmp.v
+        - src/16x16/l2_state.tmp.v
+        - src/16x16/pc_cmp.tmp.v
+        - src/16x16/xy_to_flat_id.tmp.v
+      verilogIncludeFiles:
+        - src/16x16/cross_module.tmp.h
+        - src/16x16/define.tmp.h
+        - src/16x16/l2.tmp.h
+    execute:
+      common:
+        args:
+          - +nCores=256
+      tests:
+        token:
+          args:
+            - +iterations=1
+        fib:
+          args:
+            - +iterations=1
+        dhry:
+          args:
+            - +iterations=1
+  32x32:
+    compile:
+      verilogSourceFiles:
+        - src/32x32/chipset_impl.tmp.v
+        - src/32x32/chip.tmp.v
+        - src/32x32/ciop_iob.tmp.v
+        - src/32x32/flat_id_to_xy.tmp.v
+        - src/32x32/l15_home_encoder.tmp.v
+        - src/32x32/l2_pipe1_ctrl.tmp.v
+        - src/32x32/l2_priority_encoder.tmp.v
+        - src/32x32/l2_state.tmp.v
+        - src/32x32/pc_cmp.tmp.v
+        - src/32x32/xy_to_flat_id.tmp.v
+      verilogIncludeFiles:
+        - src/32x32/cross_module.tmp.h
+        - src/32x32/define.tmp.h
+        - src/32x32/l2.tmp.h
+    execute:
+      common:
+        args:
+          - +nCores=1024
+      tests:
+        token:
+          args:
+            - +iterations=1
+        fib:
+          args:
+            - +iterations=1
+        dhry:
+          args:
+            - +iterations=1
