@@ -83,11 +83,24 @@ def _cppbuild(cgraph: CGraph, descr: CompileDescriptor, compileDir: str) -> CNod
 
     def job() -> bool:
         cmd = ["make", "-j", str(len(CTX.usableCpus)), "-C", "obj_dir", "-f", f"{_PREFIX}.mk"]
+        env = {"CCACHE_DEBUG": "1", "CCACHE_DEBUGLEVEL": "1"}
         # Run it
-        if runcmd(cmd, step):
+        if runcmd(cmd, step, env):
             # On successfull run, gather some metrics
             with open(f"_{step}/time.json", "r", encoding="utf-8") as fd:
                 cData = json.load(fd)
+            # Gather ccache hit rate
+            ccacheHits = 0
+            objectFiles = 0
+            for dirPath, _, fileNames in os.walk("obj_dir"):
+                for fileName in fileNames:
+                    if fileName.endswith(".o"):
+                        objectFiles += 1
+                    if fileName.endswith("ccache-log") and ".o." in fileName:
+                        with open(os.path.join(dirPath, fileName), "r", encoding="utf-8") as fd:
+                            if "Succeeded getting cached result" in fd.read():
+                                ccacheHits += 1
+            cData["ccacheHit"] = 100.0 * ccacheHits / max(objectFiles, 1)
             data = {descr.case: {step: cData}}
             # Add combined 'verilate' + 'cppbuild'
             with open("_verilate/time.json", "r", encoding="utf-8") as fd:

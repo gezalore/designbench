@@ -34,6 +34,7 @@ Metric = Literal[
     "speed",
     "clocks",
     "traceSize",
+    "ccacheHit",
 ]
 
 
@@ -67,6 +68,8 @@ METRICS: Final[Dict[Metric, MetricDef]] = {
                             "(deterministic, for sanity checking only)"),
     "traceSize" : MetricDef("Trace dump size [MB]", operator.add,   0,    False,
                             "Size of trace dumps"),
+    "ccacheHit" : MetricDef("ccache hit rate [%]",  None,           None, True,
+                            "ccache hit rate during C++ compilation"),
 }
 #fmt : on
 

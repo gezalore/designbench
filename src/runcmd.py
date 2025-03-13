@@ -5,7 +5,7 @@ import os
 import shlex
 import subprocess
 import time
-from typing import Final, List
+from typing import Dict, Final, List
 
 import misc
 from context import CTX
@@ -22,6 +22,7 @@ _TIMEFORMAT: Final[str] = """{
 def runcmd(
     cmd: List[str],  # Command + arguments
     tag: str,  # Tag string to use for log and marker files
+    extraEnv: Dict[str, str] | None = None,  # Additional environment variables
 ) -> bool:
     tagDir = f"_{tag}"
     os.makedirs(tagDir, exist_ok=True)
@@ -33,6 +34,11 @@ def runcmd(
         for word in iterator:
             cmdFile.write(" ")
             cmdFile.write(shlex.quote(word))
+
+    # Add extraEnv
+    env = os.environ.copy()
+    if extraEnv is not None:
+        env.update(extraEnv)
 
     cwd = os.getcwd()
     logFile = os.path.join(tagDir, "stdout.log")
@@ -51,7 +57,12 @@ def runcmd(
 
     # Start the process
     with subprocess.Popen(
-        args=cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding="utf-8"
+        args=cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        encoding="utf-8",
+        env=env,
     ) as process:
         # Gather stdout/stderr into the logfile, prefixed by time stamps for each line
         with open(logFile, "w", encoding="utf-8") as fd:
