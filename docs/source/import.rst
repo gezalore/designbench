@@ -1,16 +1,19 @@
-## How to import new designs
+Importing new designs
+=====================
 
 Here we describe the considerations you need to make before, and the process of
 adding new benchmarks to designbench.
 
-### Requirements about new benchmarks
+Requirements about new benchmarks
+---------------------------------
 
 Please consider the following before deciding to add a new design. Some of
 these (e.g. licensing) are hard requirements, as stated. For others we only
 ask that you use your best judgement, and please reach out if you would like
 to discuss specifics.
 
-#### Source repository and Licensing
+Source repository and Licensing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Any new designs that are to be added to the public designbench repository must
 be available as open source code form a publicly hosted repository that
@@ -34,15 +37,16 @@ all those dependencies must be available under the same terms as above, and
 will need to be included when adding your design.
 
 If you cannot meet all of these requirements, but still would like to use a
-design with designbench _privately_, then you can do so as described
-[below](#private-benchmarks), and you are not required to consider anything
+design with designbench *privately*, then you can do so as described
+:ref:`here <private-benchmarks>`, and you are not required to consider anything
 else described here.
 
 Alternatively, if you are the original author, then you can contribute cases
-to be included with the [designbench Copyright and License](../LICENSE)
-itself, if you are happy to do so.
+to be included with the designbench Copyright and License itself, if you are
+happy to do so.
 
-#### Maturity
+Maturity
+^^^^^^^^
 
 Any design added to the designbench repository must have sufficient maturity
 and code quality that they are unlikely to cause difficulties in the use of
@@ -62,7 +66,8 @@ when changing scheduling algorithms, so please try to avoid knowingly including
 them. Again we appreciate race conditions are hard to discover, so we are only
 asking for your diligence.
 
-#### Scale and relevance
+Scale and relevance
+^^^^^^^^^^^^^^^^^^^
 
 Benchmarks need to be of a certain size to be useful. This means that if both
 compilation and execution takes less than a few seconds, then there is little
@@ -85,7 +90,8 @@ It is even better if your design is configurable, and the configuration can be
 tuned such that it yield a conveniently sized benchmark. The Vortex GPU design
 included in designbench is a good example of such a case.
 
-#### Functionality
+Functionality
+^^^^^^^^^^^^^
 
 The function of a design does not matter much beyond the point that it needs
 to do something that is considered useful by the community.
@@ -102,7 +108,8 @@ as we do not want to draw false conclusions by optimizing something away
 that was required, then claim a significant speedup only to realize later
 that the design is no longer doing what it is supposed to do.
 
-#### Dependencies
+Dependencies
+^^^^^^^^^^^^
 
 The goal of designbench is to facilitate tool development, so we need to keep
 external dependencies to a minimum, as we cannot afford the time to handle
@@ -146,19 +153,20 @@ As always, common sense prevails, keeping in mind the goal of designbench is
 to be an easy to use performance evaluation platform. When in doubt, please
 open a discussion.
 
-#### Code Structure
+Code Structure
+^^^^^^^^^^^^^^
 
 In order to import a new design into designbench, it must fit into the
 standard structure designbench uses. This is hopefully generic enough to
 fit most cases, but if you are facing difficulty please reach out to discuss.
 
 Most importantly, designbench compiles all designs with the Verilator options
-`--cc --main --timing`. That is, the simulation driver `main` function is the
-builtin one provided by Verilator.
+``--cc --main --timing``. That is, the simulation driver ``main`` function is
+the builtin one provided by Verilator.
 
 If you are using an existing C++ wrapper of your own to drive the verilated
 model, you will need to modify your simulation environment by adding a top
-level testbench with no inputs to drive your design, and add `initial` blocks
+level testbench with no inputs to drive your design, and add ``initial`` blocks
 there to perform any run-time setup (you can call back into C++ via the DPI if
 necessary). If your design is so heavily dependent on the Verilator C++
 interface that you cannot reasonably do this, then it is not suitable for
@@ -169,21 +177,23 @@ effort. If you have a proper SystemVerilog testbench that you use with
 commercial simulator, that might be a more appropriate starting point for
 designbench.
 
-If you originally depend on the Verilator `--no-timing` option, then you need
-to manually remove timing controls ('`#` delays') first. It is easiest to do
-this by removing the `--timing`/`--no-timing` option from Verilator, and then
-remove the delays where Verilator complains with a 'NEEDTIMINGOPT' message.
+If you originally depend on the Verilator ``--no-timing`` option, then you need
+to manually remove timing controls ('``#`` delays') first. It is easiest to do
+this by removing the ``--timing``/``--no-timing``` option from Verilator, and
+then remove the delays where Verilator complains with a 'NEEDTIMINGOPT' message.
 
 For further constraints on code structure, please see the import steps below.
 
-### Steps for adding a new design
+Steps for adding a new design
+-----------------------------
 
 Please follow these steps if you would like to proceed to add a new design to
 designbench. Your contribution is appreciated.
 
-#### Creating the design subdirectory
+Creating the design subdirectory
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Every individual design resides in a subdirectory under the `designs/`
+Every individual design resides in a subdirectory under the ``designs/``
 directory located in the root of the designbench repository.
 
 You must create a new subdirectory here. The name of this subdirectory is
@@ -202,43 +212,46 @@ a small scale if necessary, but designs should be meaningfully different not
 to warrant bulk duplication. If you can't meet this, please reconsider whether
 your case is suitable for designbench.
 
-#### Adding the design descriptor and source files
+Adding the design descriptor and source files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Within the design subdirectory, you need to create a designbench descriptor
-file, called `descriptor.yaml`. This is a YAML file that defines how to compile
-your design, how to execute tests, its configurations, and some other required
-metadata, like the origin and licensing of your design. The format of the
-designbench descriptor is described [here](descriptor.md). You can also refer
-to the descriptors of existing designs. The 'Example' design contains a minimal
-design to showcase the structure.
+file, called ``descriptor.yaml``. This is a YAML file that defines how to
+compile your design, how to execute tests, its configurations, and some other
+required metadata, like the origin and licensing of your design. The format of
+the designbench descriptor is described :ref:`here <design-descriptor>`.
+You can also refer to the descriptors of existing designs. The 'Example'
+design contains a minimal design to showcase the structure.
 
 The only strict requirement about the structure of the design subdirectory is
-the presence of the `descriptor.yaml` file in its root. Otherwise you can
+the presence of the ``descriptor.yaml`` file in its root. Otherwise you can
 follow whatever structure is suitable for your case. Conventionally source code
-used during compilation is contained in the `src` subdirectory, and files
-required during execution are contained in the `tests` subdirectory. The way
-designbench figures out your design is through the `descriptor.yaml` file,
+used during compilation is contained in the ``src`` subdirectory, and files
+required during execution are contained in the ``tests`` subdirectory. The way
+designbench figures out your design is through the ``descriptor.yaml`` file,
 so as long as that is correct you can add your code in whatever way is most
 appropriate.
 
-Once you added the design descriptor, you can use `./designbench show --cases`
+Once you added the design descriptor, you can use ``./designbench show --cases``
 to see that designbench is now aware of your cases, or to see potential errors.
 
-#### Designbench specific code
+Designbench specific code
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The only designbench specific change you need to make to your design, is to
 add the line
 
-```verilog
-`include "__designbench_top_include.vh"
-```
+.. code:: systemverilog
+
+    `include "__designbench_top_include.vh"
 
 to the body of your top level module. This includes a small amount of support
 code that designbench uses to implement some of its functionality, like enable
 waveform tracing or count the number of simulated clock cycles. You should not
 need to be aware of the specifics for the purposes of importing your design.
 
-#### Test cases
+Test cases
+^^^^^^^^^^
 
 When choosing test cases, it is preferable that all tests are runnable on
 all configurations of your design. However, you can pass configuration specific
@@ -247,7 +260,7 @@ by specifying them in the relevant section of the design descriptor.
 
 Tests need to assert that basic functionality is correct. They can do so either
 by being self checking, and terminate the simulation with a non-zero exist
-status, or you can use the test `postHook` in the design descriptor to run an
+status, or you can use the test ``postHook`` in the design descriptor to run an
 external script that can check output or log files.
 
 Otherwise there is no restriction on what a test does when it is executed, but
@@ -262,7 +275,7 @@ issues were introduced.
 For all other tests, it is helpful to make them somehow scalable in execution
 time. That is, to have a parameter that will make the test execute for a longer
 or shorter period of time. A lot of the existing cases do this using the
-`+iterations` argument, which the design testbench picks up to change the
+``+iterations`` argument, which the design testbench picks up to change the
 initialization or behavior of the simulation.
 
 There are two strategies that are commonly usable to make a test scalable in
@@ -282,25 +295,29 @@ can modify your target linker scripts to store this iteration count at a fixed
 location in memory, and override the value from the testbench after
 initialization.
 
-Having tests scalable like this is not a requirement, and it is ok to provide
+Having tests scalable like this is not a requirement, and it is OK to provide
 tests that perform a constant function, so long as that takes a sufficient
 amount of simulation time to be useful for designbench.
 
-#### Validating the new entry
+Validating the new entry
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-Once you have your new design all set up, please run `./designbench validate`,
+Once you have your new design all set up, please run ``./designbench validate``,
 which will perform some consistency checks, for example that you have not
 added any unnecessary files, or that the repository and license URLs are
 reachable.
 
-Finally, please run `./designbench run --cases 'YourDesign:*'`, and make sure
+Finally, please run ``./designbench run --cases 'YourDesign:*'``, and make sure
 that all cases can pass successfully.
 
-### Private benchmarks
+.. _private-benchmarks:
+
+Private benchmarks
+------------------
 
 If you wish to use a private benchmark with designbench, you can follow the
 steps above to create a design subdirectory and design descriptor the same way
 as described, except you are recommended to symlink the subdirectory under the
-`designs/` directory, instead of moving it there directly. This way you can
+``designs/`` directory, instead of moving it there directly. This way you can
 manage the external design subdirectory in whatever way you need to while
 making designbench aware of its existence.

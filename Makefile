@@ -15,9 +15,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-
 PYTHON := $(ROOT_DIR)/venv/bin/python
-
 export PYTHONPATH := "$(ROOT_DIR)/src:$(PYTHONPATH)"
 
 .DEFAULT_GOAL := help
@@ -37,13 +35,18 @@ typecheck:
 lint:
 	$(PYTHON) -m pylint src
 
+.PHONY: spellcheck
+spellcheck:
+	$(MAKE) -C docs spelling
+
 .PHONY: check
-check: typecheck lint
+check: typecheck lint spellcheck
 
 .PHONY: format
 format:
 	$(PYTHON) -m ruff check --select I --fix src
 	$(PYTHON) -m ruff format src
+	$(PYTHON) -m ruff format docs/source/conf.py
 
 help:
 	@echo "Available targets:"

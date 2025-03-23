@@ -55,4 +55,4 @@ For a quick smoke test, run:
 
 This will take about 2 minutes to finish, and will compile and execute the `OpenTitan:default:hello` case, then print some of the recorded metrics.
 
-For detailed instructions, see the [documentation](docs/index.md).
+For detailed instructions, see the [documentation](https://gezalore.github.io/designbench/).
