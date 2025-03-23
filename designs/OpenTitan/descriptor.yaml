@@ -665,7 +665,7 @@ compile:
     RV_CORE_IBEX_SIM_SRAM: 1
     DISABLE_PRIM_CDC_RAND_DELAY: 1
   topModule: chip_sim_tb
-  mainClock: $root.chip_sim_tb.clk_i
+  mainClock: chip_sim_tb.clk_i
   verilatorArgs: [
     --unroll-count, 512,
     --autoflush

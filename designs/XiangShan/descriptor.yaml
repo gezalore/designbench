@@ -25,7 +25,7 @@ compile:
   cppIncludeFiles:
     - src/common/common.h
   topModule: tb
-  mainClock: $root.tb.clock
+  mainClock: tb.clock
 
 execute:
   common:

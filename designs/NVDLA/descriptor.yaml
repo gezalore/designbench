@@ -422,7 +422,7 @@ compile:
     PRAND_OFF: 1
     NO_DUMPS: 1
   topModule: tb_top
-  mainClock: $root.tb_top.clk
+  mainClock: tb_top.clk
   verilatorArgs:
     - --autoflush
     - --timescale

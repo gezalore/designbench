@@ -62,7 +62,7 @@ compile:
     - src/el2_dec_csr_equ_m.svh
     - src/icache_macros.svh
   topModule: tb_top
-  mainClock: $root.tb_top.core_clk
+  mainClock: tb_top.core_clk
   verilatorArgs: [
     --autoflush
   ]

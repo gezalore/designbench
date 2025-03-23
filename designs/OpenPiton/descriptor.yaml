@@ -295,7 +295,7 @@ compile:
   cppSourceFiles:
     - src/common/iob_main.cc
   topModule: cmp_top
-  mainClock: $root.cmp_top.core_ref_clk
+  mainClock: cmp_top.core_ref_clk
   verilatorArgs:
     - --autoflush
     - -Wno-BLKANDNBLK

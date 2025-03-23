@@ -58,7 +58,7 @@ compile:
   verilogIncludeFiles:
     - src/dasm.svi
   topModule: tb_top
-  mainClock: $root.tb_top.core_clk
+  mainClock: tb_top.core_clk
   verilatorArgs: [
     --autoflush
   ]

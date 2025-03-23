@@ -300,7 +300,7 @@ compile:
     - src/uart.v
   verilatorArgs: [ --autoflush, -Wno-BLKANDNBLK ]
   topModule: tb
-  mainClock: $root.tb.clk
+  mainClock: tb.clk
 
 execute:
   common:

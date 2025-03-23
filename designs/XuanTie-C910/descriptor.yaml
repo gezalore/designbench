@@ -476,7 +476,7 @@ compile:
     - src/tap2_sm.v
   verilatorArgs: [ --autoflush ]
   topModule: tb
-  mainClock: $root.tb.clk
+  mainClock: tb.clk
 
 execute:
   common:

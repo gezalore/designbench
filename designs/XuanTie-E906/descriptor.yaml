@@ -258,7 +258,7 @@ compile:
     - src/wic.v
   verilatorArgs: [ --autoflush ]
   topModule: tb
-  mainClock: $root.tb.clk
+  mainClock: tb.clk
 
 execute:
   common:

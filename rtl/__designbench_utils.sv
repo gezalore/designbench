@@ -21,7 +21,7 @@ module __designbench_utils;
   end
 
   longint unsigned cycles = 0;
-  always @(posedge `__DESIGNBENCH_MAIN_CLOCK) ++cycles;
+  always @(posedge $root.`__DESIGNBENCH_MAIN_CLOCK) ++cycles;
 
   final begin
     integer fd;

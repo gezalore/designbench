@@ -149,7 +149,8 @@ The name of the top level module. Must be defined in the combined descriptor.
 #### `mainClock`
 
 A SystemVerilog hierarchical path expression that refers to the main clock
-signal of the design. Typically something like `$root.top.clk`. This is the
+signal of the design, relative to the root of the hierarchy (relative to
+SystemVerilog `$root`). Typically something like `top_mod.clk`. This is the
 clock used by designbench to measure the number or simulated clock cycles and
 report simulation speed as the achieved frequency of this clock. Must be
 defined in the combined descriptor.
