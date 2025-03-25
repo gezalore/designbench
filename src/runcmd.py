@@ -3,6 +3,7 @@
 import json
 import os
 import shlex
+import stat
 import subprocess
 import time
 from typing import Dict, Final, List
@@ -27,13 +28,15 @@ def runcmd(
     tagDir = f"_{tag}"
     os.makedirs(tagDir, exist_ok=True)
 
+    cmd = list(map(shlex.quote, cmd))
+
     # Write the command out for easier debugging of the steps
-    with open(os.path.join(tagDir, "cmd"), "w", encoding="utf-8") as cmdFile:
-        iterator = iter(cmd)
-        cmdFile.write(shlex.quote(next(iterator)))
-        for word in iterator:
-            cmdFile.write(" ")
-            cmdFile.write(shlex.quote(word))
+    cmdFileName = os.path.join(tagDir, "cmd")
+    with open(cmdFileName, "w", encoding="utf-8") as cmdFile:
+        cmdFile.write("#!/bin/sh\n")
+        cmdFile.write(" ".join(cmd))
+        cmdFile.write(' "$@"\n')
+    os.chmod(cmdFileName, os.stat(cmdFileName).st_mode | stat.S_IEXEC | stat.S_IXGRP)
 
     # Add extraEnv
     env = os.environ.copy()
@@ -46,11 +49,11 @@ def runcmd(
     # Tell the user where the stdout log is, and how they can reproduce the command
     misc.echo(f"CWD: {cwd}")
     misc.echo(f"LOG: {os.path.join(cwd, logFile)}")
-    misc.echo(f"CMD: {' '.join(map(shlex.quote, cmd))}", style="magenta")
+    misc.echo(f"CMD: {' '.join(cmd)}", style="magenta")
 
-    # Add 'time' prefix
+    # Actual command line to run, using the cmd file
     timeFile = os.path.join(tagDir, "time.json")
-    cmd = ["time", "-o", timeFile, "-f", _TIMEFORMAT] + cmd
+    cmd = ["time", "-o", timeFile, "-f", _TIMEFORMAT, cmdFileName]
 
     # Base of time stamps in stdout log
     startTime = time.monotonic_ns()
