@@ -1,4 +1,4 @@
-# Copyright 2025 designbench contributors
+# Copyright 2025 RTLMeter contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -110,7 +110,7 @@ class ArgPatternMatcher:
                     if suggestions := difflib.get_close_matches(pattern, self._choices, cutoff=0.8):
                         raise argparse.ArgumentTypeError(f"{msg}, did you mean '{suggestions[0]}'?")
                 raise argparse.ArgumentTypeError(
-                    f"{msg}, for valid choicese see 'designbench show --{self.what}'"
+                    f"{msg}, for valid choicese see 'rtlmeter show --{self.what}'"
                 )
         assert set(result) == included, "'result' and 'incldued' does not match"
         return result

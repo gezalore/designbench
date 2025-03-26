@@ -1,7 +1,7 @@
 Running benchmarks
 ==================
 
-To run a cases, you use the ``./designbench run`` subcommand. This uses the
+To run a cases, you use the ``./rtlmeter run`` subcommand. This uses the
 ``verilator`` executable from your ``$PATH`` to compile and execute
 simulations, gathering performance metrics as it does.
 
@@ -13,7 +13,7 @@ a clean repository, run:
 
 .. code:: shell
 
-    ./designbench run --cases OpenTitan:default:hello
+    ./rtlmeter run --cases OpenTitan:default:hello
 
 The above will perform 2 major operations:
 
@@ -34,16 +34,16 @@ There are other minor steps involved, for preparing compilation and simulation
 inputs, and checking simulation results, which are not relevant for performance
 evaluation, and are not instrumented.
 
-To see all major steps that designbench will instrument, you can run:
+To see all major steps that RTLMeter will instrument, you can run:
 
 .. code:: shell
 
-    ./designbench show --steps
+    ./rtlmeter show --steps
 
 Structure of working directory
 ------------------------------
 
-``./designbench run`` will place all artifacts into a *working directory*,
+``./rtlmeter run`` will place all artifacts into a *working directory*,
 which is called ``work`` by default. An alternative path to the working
 directory can be specified with the ``--workRoot`` option.
 
@@ -73,8 +73,8 @@ Subsequently, for a given case, execution uses the
 simulation.
 
 Within each of these directories, there are subdirectories starting with ``_``,
-that designbench uses to keep track of various thing. There is one of these
-``_`` directories per internal step executed by designbench, some of which are
+that RTLMeter uses to keep track of various thing. There is one of these
+``_`` directories per internal step executed by RTLMeter, some of which are
 major steps as described above (e.g: ``_verilate`` corresponds to the
 ``verilate`` step), while others are minor steps not relevant for performance
 evaluation (e.g.: ``_files`` corresponds to setting up input files for
@@ -93,7 +93,7 @@ is to specify a single case:
 
 .. code:: shell
 
-    ./designbench run --cases OpenTitan:default:hello
+    ./rtlmeter run --cases OpenTitan:default:hello
 
 You can also use shell-style wildcards to specify multiple cases (be careful
 to escape the file globbing of your shell). For example, to run all cases of
@@ -101,24 +101,24 @@ the OpenTitan design:
 
 .. code:: shell
 
-    ./designbench run --cases 'OpenTitan:*'
+    ./rtlmeter run --cases 'OpenTitan:*'
 
 This will run the subset of all cases (as reported by
-``./designbench show --cases``) that match the given pattern.
+``./rtlmeter show --cases``) that match the given pattern.
 
 You can also provide multiple patterns, separated by spaces. For example, to
 run two cases:
 
 .. code:: shell
 
-    ./designbench run --cases 'OpenTitan:default:hello OpenTitan:default:cmark'
+    ./rtlmeter run --cases 'OpenTitan:default:hello OpenTitan:default:cmark'
 
 You can prefix a pattern with ``!`` to exclude matching cases. The following
 runs all OpenTitan cases, except for ``OpenTitan:default:hello``:
 
 .. code:: shell
 
-    ./designbench run --cases 'OpenTitan:* !*:hello'
+    ./rtlmeter run --cases 'OpenTitan:* !*:hello'
 
 Patterns are processed left to right, and cases are run in the order they
 are matched. Exclusions apply only to cases listed earlier. If multiple
@@ -129,7 +129,7 @@ run the ``cmark`` tests on all configurations of all VeeR cores, except
 
 .. code:: shell
 
-    ./designbench run --cases 'VeeR*:cmark !*:hiperf:* VeeR-EH1:hiperf:cmark'
+    ./rtlmeter run --cases 'VeeR*:cmark !*:hiperf:* VeeR-EH1:hiperf:cmark'
 
 The point here is that you can fine tune the order in which cases are run,
 in case you would like to see some results earlier than others.
@@ -138,7 +138,7 @@ If you want, you can of course run all cases with:
 
 .. code:: shell
 
-    ./designbench run --cases "*"
+    ./rtlmeter run --cases "*"
 
 Beware however that this will take a very long time to complete and some cases
 need a very large amount of host memory (128GB+).
@@ -148,19 +148,19 @@ you can run all but some very long and very short cases with:
 
 .. code:: shell
 
-    ./designbench run --cases "!Vortex:huge* !XiangShan:default* !*:linux !*:hello"
+    ./rtlmeter run --cases "!Vortex:huge* !XiangShan:default* !*:linux !*:hello"
 
 There are two further ways you can specify cases.
 
 Cases can be marked as belonging to a special set of cases using *tags*.
-To see the available tags, you can run ``./designbench show --tags``.
+To see the available tags, you can run ``./rtlmeter show --tags``.
 You can specify a tag to the ``--cases`` option as ``+<TAG>``, for example, to
 run a standard set of cases suitable for baseline performance evaluation, you
 can try:
 
 .. code:: shell
 
-    ./designbench run --cases "+standard"
+    ./rtlmeter run --cases "+standard"
 
 You can also specify a list of patterns in a file, one per line, and pass
 ``@filename`` to ``--cases``.
@@ -171,27 +171,29 @@ you can use:
 
 .. code:: shell
 
-    ./designbench run --cases "@case-list.txt !+long !+large"
+    ./rtlmeter run --cases "@case-list.txt !+long !+large"
+
+.. _saved-steps:
 
 Saving of intermediate steps performed earlier
 ----------------------------------------------
 
 When the working directory already contains the required artifacts from an
-earlier run, ``designbench run`` will reuse those results, and skip the
+earlier run, ``rtlmeter run`` will reuse those results, and skip the
 corresponding steps on a subsequent run. This can be used to incrementally
 collect more data while minimizing latency:
 
 .. code:: shell
 
     # Quick sanity check
-    ./designbench run --cases OpenTitan:default:hello
+    ./rtlmeter run --cases OpenTitan:default:hello
 
 If you are satisfied with the above, you can then run all remaining cases:
 
 .. code:: shell
 
     # Run all remaining cases
-    ./designbench run --cases 'OpenTitan:*'
+    ./rtlmeter run --cases 'OpenTitan:*'
 
 This second invocation will skip compilation, and will also skip running the
 ``hello`` test, as these steps were already performed by the first invocation.
@@ -205,11 +207,11 @@ directory:
 
     rm -rf work/OpenTitan/default/execute-0/aes
     # This will rerun OpenTitan:default:aes
-    ./designbench run --cases 'OpenTitan:*'
+    ./rtlmeter run --cases 'OpenTitan:*'
 
 .. important::
 
-    Designbench does not track data dependencies among steps, so doing this
+    RTLMeter does not track data dependencies among steps, so doing this
     is only safe if you have not modified the design or verilator in between
     the runs.
 
@@ -218,13 +220,13 @@ on a subsequent run (that is, failures are saved in the working directory as
 well). This is by design, in case a long running benchmarking session (e.g.:
 an overnight script) encounters a failure, we do not want to waste time
 re-attempting the failed step. To force retrying steps failed on an earlier
-run, use the ``--retry`` option of ``./designbench run``, or use a new
+run, use the ``--retry`` option of ``./rtlmeter run``, or use a new
 working directory.
 
 Rerunning external commands manually
 ------------------------------------
 
-Whenever an external command is invoked during a step, designbench prints the
+Whenever an external command is invoked during a step, RTLMeter prints the
 working directory, command line, and the location of the log file holding the
 stdout/stderr produced by the command.
 
@@ -233,7 +235,7 @@ intermediate steps, like the invocation of Verilator, or the running of the
 simulation.
 
 For example, when you first run
-``./designbench run --cases OpenTitan:default:hello``, it will print something
+``./rtlmeter run --cases OpenTitan:default:hello``, it will print something
 akin to the following:
 
 .. code:: text
@@ -245,7 +247,7 @@ akin to the following:
 
 You should be able to ``cd`` into the working directory (printed after CWD),
 and invoke the printed command (CMD) directly to run exactly the same command
-as designbench just did. The command is also written to a one-liner shell
+as RTLMeter just did. The command is also written to a one-liner shell
 script file ``cmd``, under the ``_<STEP>`` directory, in this case
 ``_verilate/cmd``. You can run this to reproduce the step. You can also pass
 additional command line arguments to the ``cmd`` file, which are passed through
@@ -268,15 +270,15 @@ Repeating runs for better measurements
 
 One issue with benchmarking software performance is the variability in
 measurements due to random processes on the host machine (noise). To help
-evaluate this variance, and to enable drawing robust conclusions, designbench
+evaluate this variance, and to enable drawing robust conclusions, RTLMeter
 supports running compilation and execution multiple times, using the
-``--nCompile`` and ``--nExecute`` options of ``./designbench run``. These will
-cause designbench to perform repeated compilation and execution of each case.
+``--nCompile`` and ``--nExecute`` options of ``./rtlmeter run``. These will
+cause RTLMeter to perform repeated compilation and execution of each case.
 For example, the following will run each of the specified cases 3 times:
 
 .. code:: shell
 
-    ./designbench run --cases 'OpenTitan:*' --nExecute 3
+    ./rtlmeter run --cases 'OpenTitan:*' --nExecute 3
 
 Actually, what this command really does, is it populates the
 ``<DESIGN>/<CONFIGURATION>/execute-<N>/<TEST>`` subdirectories for ``<N>``
@@ -286,7 +288,7 @@ add more samples by increasing the sample count:
 
 .. code:: shell
 
-    ./designbench run --cases 'OpenTitan:*' --nExecute 5
+    ./rtlmeter run --cases 'OpenTitan:*' --nExecute 5
 
 As described in the section about saving of intermediate results, the above
 will skip execution for ``<N>`` 0, 1, and 2 (they are available from the
@@ -297,7 +299,7 @@ If you are interested in measuring compilation speed only, you can use:
 
 .. code:: shell
 
-    ./designbench run --cases 'OpenTitan:*' --nCompile 3 --nExecute 0
+    ./rtlmeter run --cases 'OpenTitan:*' --nCompile 3 --nExecute 0
 
 This will perform 3 repeated compilation of the configurations required by
 the specified cases, but will not execute any of the tests.

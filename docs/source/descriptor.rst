@@ -4,13 +4,14 @@ Design descriptor format
 ========================
 
 This section explains the format of the design descriptor YAML file, which
-is used by designbench to understand how to handle a design.
+is used by RTLMeter to understand how to handle a design.
 
 For examples, please refer to the existing descriptors in the repository (
 ``designs/*/descriptor.yaml``).
 
-The formal schema of the descriptor that is used for run-time validation can
-be found in ``src/schema.yaml``.
+The formal schema of the descriptor used for run-time validation can
+be found in `src/schema.yaml
+<https://github.com/gezalore/designbench/blob/main/src/schema.yaml>`_.
 
 Types of entries
 ----------------
@@ -23,7 +24,7 @@ Various entries in the design descriptor refer to files in the design
 subdirectory. All file references are interpreted as paths relative to the
 deign directory (that is, relative to the directory containing
 ``descriptor.yaml``). Furthermore, to prevent picking up any unlisted files
-during a build, designbench runs are sandboxed in the working directory via
+during a build, RTLMeter runs are sandboxed in the working directory via
 symlinks that point to the files listed in the design descriptor. This requires
 that all file names used within the same descriptor entry to be unique.
 That is, you cannot have two different files with the same name that are
@@ -54,12 +55,12 @@ The following are the top level entries that appear in a design descriptor.
    control.
 
    Whatever is listed here should be sufficient to reconstruct the source of
-   the import (excluding modifications you made specifically for designbench),
+   the import (excluding modifications you made specifically for RTLMeter),
    to audit its ownership.
 
-   If you wish to include a design under the designbench license and copyright,
+   If you wish to include a design under the RTLMeter license and copyright,
    you can set ``repository`` and ``revision`` to the value 'local' and point
-   the ``licenses`` entry to the license file in the root of the designbench
+   the ``licenses`` entry to the license file in the root of the RTLMeter
    repository, see the 'Example' design.
 
    See the Example, OpenTitan, and Vortex designs for example.
@@ -77,7 +78,7 @@ The following are the top level entries that appear in a design descriptor.
 
    The ``tests`` entry, is a mapping from test names to
    :ref:`execute descriptors<execute-descriptor>`, which define how to execute
-   a test. The keys of the ``tests`` entry are used by designbench as the names
+   a test. The keys of the ``tests`` entry are used by RTLMeter as the names
    of the tests. That is, they are the ``<TEST>`` part when naming cases with
    ``<DESIGN>:<CONFIGURATION>:<TEST>``.
 
@@ -164,7 +165,7 @@ compiling your design. It contains the following properties
    A SystemVerilog hierarchical path expression that refers to the main clock
    signal of the design, relative to the root of the hierarchy (relative to
    SystemVerilog ``$root``). Typically something like ``top_module.clk``. This
-   is the clock used by designbench to measure the number or simulated clock
+   is the clock used by RTLMeter to measure the number or simulated clock
    cycles and report simulation speed as the achieved frequency of this clock.
    Must be defined in the combined descriptor.
 
@@ -209,7 +210,7 @@ Execute descriptor
 Combining descriptors
 ---------------------
 
-When constructing cases, designbench merges compile descriptors, and execute
+When constructing cases, RTLMeter merges compile descriptors, and execute
 descriptors from different entries in the design descriptor. All operation is
 then based on the combined descriptors.
 

@@ -1,4 +1,4 @@
-# Copyright 2025 designbench contributors
+# Copyright 2025 RTLMeter contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ import subprocess
 
 # -- Project information -----------------------------------------------------
 
-project = "designbench"
-copyright = "2025, designbench contributors"
+project = "RTLMeter"
+copyright = "2025, RTLMeter contributors"
 author = "Geza Lore"
 
 gitDescribe = subprocess.run(

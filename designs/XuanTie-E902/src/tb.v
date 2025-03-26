@@ -224,7 +224,7 @@ soc x_soc(
 `endif
 );
 
-`include "__designbench_top_include.vh"
+`include "__rtlmeter_top_include.vh"
 
 endmodule
 

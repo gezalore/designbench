@@ -1,4 +1,4 @@
-# Copyright 2025 designbench contributors
+# Copyright 2025 RTLMeter contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,8 +50,9 @@ format:
 
 help:
 	@echo "Available targets:"
-	@echo "  venv:      Setup Pytnon virtual env under the venv directory"
-	@echo "  check:     typecheck + lint"
-	@echo "  typecheck: Run Python type checker on src"
-	@echo "  lint:      Run Python linter on src"
-	@echo "  format:    Run Python formatter on src"
+	@echo "  venv:        Setup Pytnon virtual env under the venv directory"
+	@echo "  check:       typecheck + lint + spellcheck"
+	@echo "  typecheck:   Run Python type checker on src"
+	@echo "  lint:        Run Python linter on src"
+	@echo "  spellcheck:  Run spell checker on docs"
+	@echo "  format:      Run Python formatter"

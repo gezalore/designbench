@@ -170,6 +170,6 @@ module chip_sim_tb;
 
   always #5 clk_i = ~clk_i;
 
-`include "__designbench_top_include.vh"
+`include "__rtlmeter_top_include.vh"
 
 endmodule // chip_sim_tb

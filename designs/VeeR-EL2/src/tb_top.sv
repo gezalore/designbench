@@ -2582,6 +2582,6 @@ end // block: PACKED_1
 `include "dasm.svi"
 /* verilator lint_on CASEINCOMPLETE */
 
-`include "__designbench_top_include.vh"
+`include "__rtlmeter_top_include.vh"
 
 endmodule

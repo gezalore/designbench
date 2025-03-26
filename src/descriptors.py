@@ -1,4 +1,4 @@
-# Copyright 2025 designbench contributors
+# Copyright 2025 RTLMeter contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -101,13 +101,13 @@ class CompileDescriptor:
         self.verilogSourceFiles = [
             os.path.join(self.designDir, _) for _ in gatherList("verilogSourceFiles")
         ]
-        self.verilogSourceFiles.append(os.path.join(CTX.rootDir, "rtl", "__designbench_utils.sv"))
+        self.verilogSourceFiles.append(os.path.join(CTX.rootDir, "rtl", "__rtlmeter_utils.sv"))
         # verilogIncludeFiles are optional
         self.verilogIncludeFiles = [
             os.path.join(self.designDir, _) for _ in gatherList("verilogIncludeFiles")
         ]
         self.verilogIncludeFiles.append(
-            os.path.join(CTX.rootDir, "rtl", "__designbench_top_include.vh")
+            os.path.join(CTX.rootDir, "rtl", "__rtlmeter_top_include.vh")
         )
         # verilogDefines are optional
         self.verilogDefines = gatherDict("verilogDefines")
@@ -131,7 +131,7 @@ class CompileDescriptor:
 
         # mainClock is required
         if (value := gatherScalar("mainClock")) is not None:
-            self.verilogDefines["__DESIGNBENCH_MAIN_CLOCK"] = value
+            self.verilogDefines["__RTLMETER_MAIN_CLOCK"] = value
         else:
             misc.fatal(f"{yamlDesc['__file__']} does not specify 'mainClock'")
 

@@ -1528,7 +1528,7 @@ tile
 tile0 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[0] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[0] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd0),
     .default_coreid_y           (8'd0),
@@ -1637,7 +1637,7 @@ tile
 tile4 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[4] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[4] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd0),
     .default_coreid_y           (8'd1),
@@ -1746,7 +1746,7 @@ tile
 tile8 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[8] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[8] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd0),
     .default_coreid_y           (8'd2),
@@ -1855,7 +1855,7 @@ tile
 tile12 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[12] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[12] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd0),
     .default_coreid_y           (8'd3),
@@ -1964,7 +1964,7 @@ tile
 tile1 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[1] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[1] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd1),
     .default_coreid_y           (8'd0),
@@ -2073,7 +2073,7 @@ tile
 tile5 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[5] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[5] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd1),
     .default_coreid_y           (8'd1),
@@ -2182,7 +2182,7 @@ tile
 tile9 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[9] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[9] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd1),
     .default_coreid_y           (8'd2),
@@ -2291,7 +2291,7 @@ tile
 tile13 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[13] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[13] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd1),
     .default_coreid_y           (8'd3),
@@ -2400,7 +2400,7 @@ tile
 tile2 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[2] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[2] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd2),
     .default_coreid_y           (8'd0),
@@ -2509,7 +2509,7 @@ tile
 tile6 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[6] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[6] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd2),
     .default_coreid_y           (8'd1),
@@ -2618,7 +2618,7 @@ tile
 tile10 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[10] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[10] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd2),
     .default_coreid_y           (8'd2),
@@ -2727,7 +2727,7 @@ tile
 tile14 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[14] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[14] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd2),
     .default_coreid_y           (8'd3),
@@ -2836,7 +2836,7 @@ tile
 tile3 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[3] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[3] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd3),
     .default_coreid_y           (8'd0),
@@ -2945,7 +2945,7 @@ tile
 tile7 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[7] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[7] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd3),
     .default_coreid_y           (8'd1),
@@ -3054,7 +3054,7 @@ tile
 tile11 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[11] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[11] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd3),
     .default_coreid_y           (8'd2),
@@ -3163,7 +3163,7 @@ tile
 tile15 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[15] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[15] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd3),
     .default_coreid_y           (8'd3),

@@ -1107,7 +1107,7 @@ endfunction
 /* verilator lint_on CASEINCOMPLETE */
 /* verilator lint_on WIDTH */
 
-`include "__designbench_top_include.vh"
+`include "__rtlmeter_top_include.vh"
 
 endmodule
 `ifdef RV_BUILD_AXI4

@@ -1,12 +1,12 @@
 Comparing results
 =================
 
-One of the most important reasons designbench exists, is to enable comparison
+One of the most important reasons RTLMeter exists, is to enable comparison
 of different versions of Verilator, and to enable drawing robust conclusions
 on which version is better. For this purpose, you can use
-``./designbench compare`` to display the difference in performance metrics
+``./rtlmeter compare`` to display the difference in performance metrics
 between two runs. You provide two working directories created with
-``./designbench run``, and ``./designbench compare`` will show you the
+``./rtlmeter run``, and ``./rtlmeter compare`` will show you the
 difference in the metrics you query.
 
 Difference of two runs
@@ -16,7 +16,7 @@ As an example, let's say you are interested in the effect of the choice
 between using GCC or Clang to compile Verilator and your verilated models.
 For this we assume you have 2 different builds of Verilator available, one
 configured with ``CXX=g++``, and one configured with ``CXX=clang++``. You can
-then perform some runs to get a quick idea. Remember designbench picks up
+then perform some runs to get a quick idea. Remember RTLMeter picks up
 Verilator from your shell PATH, so let's set up some shell variables to use
 throughout the following examples:
 
@@ -29,15 +29,15 @@ You can then run a set of cases with each version:
 
 .. code:: shell
 
-    env PATH="$VERILATOR_GCC:$PATH"   ./designbench run --cases 'VeeR*:default:cmark' --nExecute 3 --workRoot work-gcc
-    env PATH="$VERILATOR_CLANG:$PATH" ./designbench run --cases 'VeeR*:default:cmark' --nExecute 3 --workRoot work-clang
+    env PATH="$VERILATOR_GCC:$PATH"   ./rtlmeter run --cases 'VeeR*:default:cmark' --nExecute 3 --workRoot work-gcc
+    env PATH="$VERILATOR_CLANG:$PATH" ./rtlmeter run --cases 'VeeR*:default:cmark' --nExecute 3 --workRoot work-clang
 
 Once this is finished (it takes ~30 minutes), you can see the difference
 in simulator execution time with the following:
 
 .. code:: shell
 
-    ./designbench compare --steps execute work-gcc work-clang
+    ./rtlmeter compare --steps execute work-gcc work-clang
 
 This will produce a report similar to:
 
@@ -63,7 +63,7 @@ You can see that using Clang, the simulation is on average ~16% faster across
 these cases compared to using GCC. The 'gain' (ratio of means) is also shown
 for each individual case.
 
-Similar to ``./designbench report``, you can use the ``--steps``, and
+Similar to ``./rtlmeter report``, you can use the ``--steps``, and
 ``--metrics`` options to compare different measurements available in the
 working directories.
 
@@ -71,12 +71,12 @@ Significance of difference
 --------------------------
 
 To check if there is a meaningful difference in the performance metrics,
-``./designbench compare`` will compute a statistical significance test for the
+``./rtlmeter compare`` will compute a statistical significance test for the
 difference between the means for each case. The corresponding *p-value* is
 reported in the last column. As is standard with statistical hypothesis
 testing, low p-values indicate a significant difference. A commonly used
 threshold for concluding a statistically significant result is a
-p-value < 0.05, so designbench reports the average gain for only those cases
+p-value < 0.05, so RTLMeter reports the average gain for only those cases
 that meet this significance threshold. In the case of execution time above
 the results are clear, Clang produces faster code.
 
@@ -90,8 +90,8 @@ so let's add a few more:
 
 .. code:: shell
 
-    env PATH="$VERILATOR_GCC:$PATH"   ./designbench run --cases 'VeeR*:default:cmark' --nCompile 3 --workRoot work-gcc
-    env PATH="$VERILATOR_CLANG:$PATH" ./designbench run --cases 'VeeR*:default:cmark' --nCompile 3 --workRoot work-clang
+    env PATH="$VERILATOR_GCC:$PATH"   ./rtlmeter run --cases 'VeeR*:default:cmark' --nCompile 3 --workRoot work-gcc
+    env PATH="$VERILATOR_CLANG:$PATH" ./rtlmeter run --cases 'VeeR*:default:cmark' --nCompile 3 --workRoot work-clang
 
 This will perform 2 more compilations of each configuration. The first one
 is available from the earlier run we did above when measuring execution time.
@@ -102,7 +102,7 @@ verilation time, use:
 
 .. code:: shell
 
-    ./designbench compare --steps verilate work-gcc work-clang
+    ./rtlmeter compare --steps verilate work-gcc work-clang
 
 
 The report looks something like:
@@ -130,15 +130,15 @@ are quite wide:
 
 .. code:: shell
 
-    env PATH="$VERILATOR_GCC:$PATH"   ./designbench run --cases 'VeeR*:default:cmark' --nCompile 30 --workRoot work-gcc
-    env PATH="$VERILATOR_CLANG:$PATH" ./designbench run --cases 'VeeR*:default:cmark' --nCompile 30 --workRoot work-clang
+    env PATH="$VERILATOR_GCC:$PATH"   ./rtlmeter run --cases 'VeeR*:default:cmark' --nCompile 30 --workRoot work-gcc
+    env PATH="$VERILATOR_CLANG:$PATH" ./rtlmeter run --cases 'VeeR*:default:cmark' --nCompile 30 --workRoot work-clang
 
 
 Then rerun:
 
 .. code:: shell
 
-    ./designbench compare --steps verilate work-gcc work-clang
+    ./rtlmeter compare --steps verilate work-gcc work-clang
 
 
 And you will see something like:
@@ -164,7 +164,7 @@ enough not to be meaningful.
 
 If you rerun the same session yourself, the actual results might of course
 differ, as they depend on the host machine, environment, or the version of the
-compilers you are using. The point here is that designbench gives you the
+compilers you are using. The point here is that RTLMeter gives you the
 ability to draw statistically sound conclusions.
 
 If you care, you can of course keep going until your time and patience allows.
@@ -186,29 +186,29 @@ Here are the results after 100 runs with both compilers:
 
 This suggests that using Clang indeed makes verilation ~1% slower on average,
 across these cases. How you use that information (whether you care or not),
-is of course outside the scope of this discussion, but designbench can give
+is of course outside the scope of this discussion, but RTLMeter can give
 you robust data to help you make decisions.
 
 Evaluating the effect of Verilator options
 ------------------------------------------
 
-You can use the ``--compileArgs`` option of ``./designbench run`` to pass
+You can use the ``--compileArgs`` option of ``./rtlmeter run`` to pass
 additional command line arguments to ``verilator`` during compilation. As an
 example, let's use this to check the effect of the ``--public-flat-rw``
-Verilator option. Note the ``=`` used to prevent ``./designbench run`` from
+Verilator option. Note the ``=`` used to prevent ``./rtlmeter run`` from
 trying to parse the extra option as an argument to itself:
 
 .. code:: shell
 
-    ./designbench run --cases 'VeeR*:default:cmark' --workRoot work-base
-    ./designbench run --cases 'VeeR*:default:cmark' --workRoot work-pfrw --compileArgs="--public-flat-rw"
+    ./rtlmeter run --cases 'VeeR*:default:cmark' --workRoot work-base
+    ./rtlmeter run --cases 'VeeR*:default:cmark' --workRoot work-pfrw --compileArgs="--public-flat-rw"
 
 
 Then run:
 
 .. code:: shell
 
-    ./designbench compare work-base work-pfrw
+    ./rtlmeter compare work-base work-pfrw
 
 Which shows:
 
@@ -248,7 +248,7 @@ directories around, to see the effect of *not using* ``--public-flat-rw``:
 
 .. code:: shell
 
-    ./designbench compare work-pfrw work-base
+    ./rtlmeter compare work-pfrw work-base
 
 Which presents:
 

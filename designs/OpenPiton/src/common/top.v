@@ -328,7 +328,7 @@ system system(
 
 `endif // DISABLE_ALL_MONITORS
 
-`include  "__designbench_top_include.vh"
+`include  "__rtlmeter_top_include.vh"
 
 endmodule // cmp_top
 

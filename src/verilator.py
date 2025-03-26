@@ -1,4 +1,4 @@
-# Copyright 2025 designbench contributors
+# Copyright 2025 RTLMeter contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -74,9 +74,9 @@ def _verilate(
         # Add extra defines if --trace is used. We check this here in case it came from extraArgs.
         lastTraceOption = ([None] + [_ for _ in cmd if _ in ("--trace", "--trace-fst")]).pop()
         if lastTraceOption == "--trace":
-            cmd.append("+define+__DESIGNBENCH_TRACE_VCD")
+            cmd.append("+define+__RTLMETER_TRACE_VCD")
         elif lastTraceOption == "--trace-fst":
-            cmd.append("+define+__DESIGNBENCH_TRACE_FST")
+            cmd.append("+define+__RTLMETER_TRACE_FST")
         # Run it
         if runcmd(cmd, step):
             # On successfull run, gather some metrics
@@ -156,7 +156,7 @@ def execute(
             with open(f"_{step}/time.json", "r", encoding="utf-8") as fd:
                 tData = json.load(fd)
             # Add design cycles
-            with open("_designbench_cycles.txt", "r", encoding="utf-8") as fd:
+            with open("_rtlmeter_cycles.txt", "r", encoding="utf-8") as fd:
                 clocks = int(fd.read())
                 tData["clocks"] = clocks
                 kiloCycles = clocks / 1e3

@@ -958,7 +958,7 @@ tile
 tile0 (
     .clk                (clk_muxed),
     .rst_n              (rst_n_inter_sync),
-    .clk_en             (/* ctap_clk_en_inter[0] always one in designbench */ 1'b1 && clk_en_inter),
+    .clk_en             (/* ctap_clk_en_inter[0] always one */ 1'b1 && clk_en_inter),
     .default_chipid             (14'b0),    // the first chip
     .default_coreid_x           (8'd0),
     .default_coreid_y           (8'd0),

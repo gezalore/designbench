@@ -308,6 +308,6 @@ module tb();
     .i_pad_rst_b         ( rst_b                )
   );
 
-`include "__designbench_top_include.vh"
+`include "__rtlmeter_top_include.vh"
 
 endmodule

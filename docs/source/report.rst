@@ -1,9 +1,9 @@
 Examining results
 =================
 
-Once you have used ``./designbench run`` to run some cases, you can use
-``./designbench report`` to display the performance metrics. This subcommand
-operates on a working directory created by ``./designbench run``, which can be
+Once you have used ``./rtlmeter run`` to run some cases, you can use
+``./rtlmeter report`` to display the performance metrics. This subcommand
+operates on a working directory created by ``./rtlmeter run``, which can be
 specified as a positional argument, and defaults to ``work``.
 
 Reporting metrics
@@ -13,13 +13,13 @@ Assuming you have previously run:
 
 .. code:: shell
 
-   ./designbench run --cases 'OpenTitan:*' --nExecute 3
+   ./rtlmeter run --cases 'OpenTitan:*' --nExecute 3
 
 Then you can see the most important metrics at a glance using:
 
 .. code:: shell
 
-   ./designbench report
+   ./rtlmeter report
 
 This will produce output similar to:
 
@@ -71,11 +71,11 @@ directory, and a brief description of their meaning, using:
 
 .. code:: shell
 
-   ./designbench show --steps work
-   ./designbench show --metrics work
+   ./rtlmeter show --steps work
+   ./rtlmeter show --metrics work
 
 You can then use the ``--steps`` and ``--metrics`` options to
-``./designbench report`` to see specific metrics. These options take a
+``./rtlmeter report`` to see specific metrics. These options take a
 single argument, that can be a space separated list of
 :ref:`patterns <specifying-cases>` similar to what ``--cases`` accepts.
 
@@ -84,14 +84,14 @@ the design, and compiling the verilated C++, use:
 
 .. code:: shell
 
-   ./designbench report --steps 'verilate cppbuild' --metrics 'elapsed cpu'
+   ./rtlmeter report --steps 'verilate cppbuild' --metrics 'elapsed cpu'
 
 To see all measurements for all steps, you can use wildcards, but this
 might be overwhelming after a big run:
 
 .. code:: shell
 
-   ./designbench report --steps '*' --metrics '*'
+   ./rtlmeter report --steps '*' --metrics '*'
 
 Viewing specific cases
 ----------------------
@@ -101,16 +101,16 @@ example, to see all but the short running ``hello`` tests:
 
 .. code:: shell
 
-   ./designbench report --cases '!*:hello'
+   ./rtlmeter report --cases '!*:hello'
 
 Adding and deleting measurements
 --------------------------------
 
-``./designbench report`` simply picks up and collates all available
+``./rtlmeter report`` simply picks up and collates all available
 measurements from the given working directory.
 
-This means it is OK to run ``./designbench report`` on a working directory that
-is still being populated by an active ``./designbench run``, to see partial
+This means it is OK to run ``./rtlmeter report`` on a working directory that
+is still being populated by an active ``./rtlmeter run``, to see partial
 results as they become available (note however the noise this might add to
 your measurements).
 
@@ -122,6 +122,6 @@ are too noisy).
 Examining raw data
 ------------------
 
-You can use ``./designbench rawdata``, which has an interface similar to
-``./designbench report``, but instead of displaying summary statistics, it
+You can use ``./rtlmeter rawdata``, which has an interface similar to
+``./rtlmeter report``, but instead of displaying summary statistics, it
 shows individual measurements. This can be helpful for identifying outliers.

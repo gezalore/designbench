@@ -1,4 +1,4 @@
-# Copyright 2025 designbench contributors
+# Copyright 2025 RTLMeter contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import subcommands.validate
 if __name__ == "__main__":
     # Create the command line parser
     parser = argparse.ArgumentParser(
-        prog="designbench", description="Verilator performance test suite", allow_abbrev=False
+        prog="rtlmeter", description="RTLMeter benchmark suite", allow_abbrev=False
     )
     subparsers = parser.add_subparsers(title="subcommands", required=True)
 

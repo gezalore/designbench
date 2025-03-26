@@ -1,4 +1,4 @@
-# Copyright 2025 designbench contributors
+# Copyright 2025 RTLMeter contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,9 +36,9 @@ class Context:
     # Absolute path to root of repository
     @cached_property
     def rootDir(self) -> str:
-        value = os.environ["DESIGNBENCH_ROOT"]
+        value = os.environ["RTLMETER_ROOT"]
         assert os.path.isabs(value), (
-            "DESIGNBENCH_ROOT must be set to the absolute path to the root of designbench"
+            "RTLMETER_ROOT must be set to the absolute path to the root of RTLMeter"
         )
         return value
 

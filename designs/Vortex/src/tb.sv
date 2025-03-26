@@ -199,6 +199,6 @@ module tb;
   assign mem_rsp[MEM_STAGES-1].ready = ~mem_rsp[MEM_STAGES-1].valid_q | mem_rsp_ready;
   assign mem_rsp[MEM_STAGES-1].move = mem_rsp[MEM_STAGES-1].valid_q & mem_rsp_ready | ~mem_rsp[MEM_STAGES-1].valid_q;
 
-`include "__designbench_top_include.vh"
+`include "__rtlmeter_top_include.vh"
 
 endmodule

@@ -334,7 +334,7 @@ module tb_top;
 
    ); // nvdla_top
 
-`include "__designbench_top_include.vh"
+`include "__rtlmeter_top_include.vh"
 
 endmodule
 

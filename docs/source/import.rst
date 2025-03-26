@@ -2,7 +2,7 @@ Importing new designs
 =====================
 
 Here we describe the considerations you need to make before, and the process of
-adding new benchmarks to designbench.
+adding new benchmarks to RTLMeter.
 
 Requirements about new benchmarks
 ---------------------------------
@@ -15,13 +15,13 @@ to discuss specifics.
 Source repository and Licensing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Any new designs that are to be added to the public designbench repository must
+Any new designs that are to be added to the public RTLMeter repository must
 be available as open source code form a publicly hosted repository that
 provides unconditional and immediate read-only access to the public, and hence
 can be forked if desired.
 
 Designs must be licensed under an open source license that permits the use
-of the source code in designbench.
+of the source code in RTLMeter.
 
 In practice this means that designs from public repositories hosted on GitHub,
 GitLab, etc., or hosted publicly by your own organization without access
@@ -37,20 +37,20 @@ all those dependencies must be available under the same terms as above, and
 will need to be included when adding your design.
 
 If you cannot meet all of these requirements, but still would like to use a
-design with designbench *privately*, then you can do so as described
+design with RTLMeter *privately*, then you can do so as described
 :ref:`here <private-benchmarks>`, and you are not required to consider anything
 else described here.
 
 Alternatively, if you are the original author, then you can contribute cases
-to be included with the designbench Copyright and License itself, if you are
+to be included with the RTLMeter Copyright and License itself, if you are
 happy to do so.
 
 Maturity
 ^^^^^^^^
 
-Any design added to the designbench repository must have sufficient maturity
+Any design added to the RTLMeter repository must have sufficient maturity
 and code quality that they are unlikely to cause difficulties in the use of
-designbench. This is required because the intention of designbench is not to
+RTLMeter. This is required because the intention of RTLMeter is not to
 find novel issues in your design, but to aid tool development.
 
 This means that the designs must be sufficiently well tested in the included
@@ -88,7 +88,7 @@ inclusion of something that you are not sure is meeting these requirements.
 
 It is even better if your design is configurable, and the configuration can be
 tuned such that it yield a conveniently sized benchmark. The Vortex GPU design
-included in designbench is a good example of such a case.
+included in RTLMeter is a good example of such a case.
 
 Functionality
 ^^^^^^^^^^^^^
@@ -111,10 +111,10 @@ that the design is no longer doing what it is supposed to do.
 Dependencies
 ^^^^^^^^^^^^
 
-The goal of designbench is to facilitate tool development, so we need to keep
+The goal of RTLMeter is to facilitate tool development, so we need to keep
 external dependencies to a minimum, as we cannot afford the time to handle
 issues arising from the management of external dependencies. This is the
-primary reason why all benchmarks are imported into the designbench repository
+primary reason why all benchmarks are imported into the RTLMeter repository
 in a standardized form as source.
 
 In general, you should assume only a standard, modern Linux environment is
@@ -132,14 +132,14 @@ preferred that you remove this and replace it with something simpler, even
 if less accurate, that can be included in source form with the design. This
 should not affect the functionality of your design, and should have little
 effect on the performance of Verilator that we are trying to evaluate with
-designbench.
+RTLMeter.
 
 Similarly, you need to pickle target executables and provide them as blobs,
 e.g in a binary, or hex dump form, so we do not need to invoke the target
-toolchain when using designbench. The same applies for example if you need
+toolchain when using RTLMeter. The same applies for example if you need
 complex external libraries to generate input stimulus to your design. You need
 to pre-compute the stimulus, and expected results, and provide them as resource
-files when importing the design into designbench.
+files when importing the design into RTLMeter.
 
 You can include C/C++ code invoked via the DPI/VPI during simulation, but
 you need to provide all dependencies beyond the C/C++ standard library in
@@ -149,18 +149,18 @@ requirements laid out above and you can extract only the parts relevant to
 the design. That is, please do not bulk import third party libraries as source
 if not necessary.
 
-As always, common sense prevails, keeping in mind the goal of designbench is
+As always, common sense prevails, keeping in mind the goal of RTLMeter is
 to be an easy to use performance evaluation platform. When in doubt, please
 open a discussion.
 
 Code Structure
 ^^^^^^^^^^^^^^
 
-In order to import a new design into designbench, it must fit into the
-standard structure designbench uses. This is hopefully generic enough to
+In order to import a new design into RTLMeter, it must fit into the
+standard structure RTLMeter uses. This is hopefully generic enough to
 fit most cases, but if you are facing difficulty please reach out to discuss.
 
-Most importantly, designbench compiles all designs with the Verilator options
+Most importantly, RTLMeter compiles all designs with the Verilator options
 ``--cc --main --timing``. That is, the simulation driver ``main`` function is
 the builtin one provided by Verilator.
 
@@ -170,12 +170,12 @@ level testbench with no inputs to drive your design, and add ``initial`` blocks
 there to perform any run-time setup (you can call back into C++ via the DPI if
 necessary). If your design is so heavily dependent on the Verilator C++
 interface that you cannot reasonably do this, then it is not suitable for
-designbench. However, a lot of the existing designs in designbench use
+RTLMeter. However, a lot of the existing designs in RTLMeter use
 complex external simulation wrappers in their original repositories, and
 modifying these to operate via a top level testbench only required small
 effort. If you have a proper SystemVerilog testbench that you use with
 commercial simulator, that might be a more appropriate starting point for
-designbench.
+RTLMeter.
 
 If you originally depend on the Verilator ``--no-timing`` option, then you need
 to manually remove timing controls ('``#`` delays') first. It is easiest to do
@@ -188,13 +188,13 @@ Steps for adding a new design
 -----------------------------
 
 Please follow these steps if you would like to proceed to add a new design to
-designbench. Your contribution is appreciated.
+RTLMeter. Your contribution is appreciated.
 
 Creating the design subdirectory
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Every individual design resides in a subdirectory under the ``designs/``
-directory located in the root of the designbench repository.
+directory located in the root of the RTLMeter repository.
 
 You must create a new subdirectory here. The name of this subdirectory is
 the name of the new design.
@@ -210,16 +210,16 @@ configurations within the same design to achieve this.
 If necessary, you can add your cases as multiple designs, duplicating code on
 a small scale if necessary, but designs should be meaningfully different not
 to warrant bulk duplication. If you can't meet this, please reconsider whether
-your case is suitable for designbench.
+your case is suitable for RTLMeter.
 
 Adding the design descriptor and source files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Within the design subdirectory, you need to create a designbench descriptor
+Within the design subdirectory, you need to create a RTLMeter descriptor
 file, called ``descriptor.yaml``. This is a YAML file that defines how to
 compile your design, how to execute tests, its configurations, and some other
 required metadata, like the origin and licensing of your design. The format of
-the designbench descriptor is described :ref:`here <design-descriptor>`.
+the RTLMeter descriptor is described :ref:`here <design-descriptor>`.
 You can also refer to the descriptors of existing designs. The 'Example'
 design contains a minimal design to showcase the structure.
 
@@ -228,25 +228,25 @@ the presence of the ``descriptor.yaml`` file in its root. Otherwise you can
 follow whatever structure is suitable for your case. Conventionally source code
 used during compilation is contained in the ``src`` subdirectory, and files
 required during execution are contained in the ``tests`` subdirectory. The way
-designbench figures out your design is through the ``descriptor.yaml`` file,
+RTLMeter figures out your design is through the ``descriptor.yaml`` file,
 so as long as that is correct you can add your code in whatever way is most
 appropriate.
 
-Once you added the design descriptor, you can use ``./designbench show --cases``
-to see that designbench is now aware of your cases, or to see potential errors.
+Once you added the design descriptor, you can use ``./rtlmeter show --cases``
+to see that RTLMeter is now aware of your cases, or to see potential errors.
 
-Designbench specific code
+RTLMeter specific code
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The only designbench specific change you need to make to your design, is to
+The only RTLMeter specific change you need to make to your design, is to
 add the line
 
 .. code:: systemverilog
 
-    `include "__designbench_top_include.vh"
+    `include "__rtlmeter_top_include.vh"
 
 to the body of your top level module. This includes a small amount of support
-code that designbench uses to implement some of its functionality, like enable
+code that RTLMeter uses to implement some of its functionality, like enable
 waveform tracing or count the number of simulated clock cycles. You should not
 need to be aware of the specifics for the purposes of importing your design.
 
@@ -297,17 +297,17 @@ initialization.
 
 Having tests scalable like this is not a requirement, and it is OK to provide
 tests that perform a constant function, so long as that takes a sufficient
-amount of simulation time to be useful for designbench.
+amount of simulation time to be useful for RTLMeter.
 
 Validating the new entry
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Once you have your new design all set up, please run ``./designbench validate``,
+Once you have your new design all set up, please run ``./rtlmeter validate``,
 which will perform some consistency checks, for example that you have not
 added any unnecessary files, or that the repository and license URLs are
 reachable.
 
-Finally, please run ``./designbench run --cases 'YourDesign:*'``, and make sure
+Finally, please run ``./rtlmeter run --cases 'YourDesign:*'``, and make sure
 that all cases can pass successfully.
 
 .. _private-benchmarks:
@@ -315,9 +315,9 @@ that all cases can pass successfully.
 Private benchmarks
 ------------------
 
-If you wish to use a private benchmark with designbench, you can follow the
+If you wish to use a private benchmark with RTLMeter, you can follow the
 steps above to create a design subdirectory and design descriptor the same way
 as described, except you are recommended to symlink the subdirectory under the
 ``designs/`` directory, instead of moving it there directly. This way you can
 manage the external design subdirectory in whatever way you need to while
-making designbench aware of its existence.
+making RTLMeter aware of its existence.

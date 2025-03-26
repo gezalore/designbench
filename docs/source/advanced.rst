@@ -2,7 +2,7 @@ Advanced usage examples
 =======================
 
 This section contains some advance usage examples that shows you how you
-can use designbench to gather data about some scenarios.
+can use RTLMeter to gather data about some scenarios.
 
 Evaluating the effect of processor affinity
 -------------------------------------------
@@ -10,7 +10,7 @@ Evaluating the effect of processor affinity
 Let's say you want to see the effect of different processor assignments on
 the execution time of a multi-threaded model.
 
-Designbench is aware of the processor affinity it was launched with, and the
+RTLMeter is aware of the processor affinity it was launched with, and the
 C++ build step is executed with the ``-j`` option to Make set to the number of
 available processors. In order not to restrict compilation to specific CPUs,
 you can compile the required configurations first, without running the execute
@@ -21,7 +21,7 @@ steps:
     echo "OpenTitan:default:cmark" > case-list.txt
     echo "XiangShan:mini*:cmark" >> case-list.txt
     echo "Vortex:sane:sgemm" >> case-list.txt
-    ./designbench run --cases @case-list.txt --compileRoot work-compile --nExecute 0 --compileArgs="--threads 4"
+    ./rtlmeter run --cases @case-list.txt --compileRoot work-compile --nExecute 0 --compileArgs="--threads 4"
 
 The ``--compileRoot`` option is similar to ``--workRoot``, but only applies to
 the compilation steps. You can then use separate working directories to perform
@@ -41,14 +41,14 @@ thread each, or on 2 physical cores with 2 threads each, you can run:
 
 .. code:: shell
 
-    numactl -C 0,1,2,3 ./designbench run --cases @case-list.txt --compileRoot work-compile --executeRoot work-4-core-1-thread --nExecute 3
-    numactl -C 0,1,8,9 ./designbench run --cases @case-list.txt --compileRoot work-compile --executeRoot work-2-core-2-thread --nExecute 3
+    numactl -C 0,1,2,3 ./rtlmeter run --cases @case-list.txt --compileRoot work-compile --executeRoot work-4-core-1-thread --nExecute 3
+    numactl -C 0,1,8,9 ./rtlmeter run --cases @case-list.txt --compileRoot work-compile --executeRoot work-2-core-2-thread --nExecute 3
 
 You can then see the effect on simulation speed with:
 
 .. code:: shell
 
-    ./designbench compare --metrics speed work-4-core-1-thread work-2-core-2-thread
+    ./rtlmeter compare --metrics speed work-4-core-1-thread work-2-core-2-thread
 
 Which shows that performance is generally better when not sharing physical
 cores, and you can quantify the effect precisely:
@@ -78,11 +78,11 @@ populate the cache with new objects. You might try something like:
 .. code:: shell
 
     # Run without caching, but populate the cache
-    env CCACHE_RECACHE=1 ./designbench run --cases "OpenTitan:default:cmark Vortex:sane:sgemm" --nExecute 0 --workRoot work-ccache-cold
+    env CCACHE_RECACHE=1 ./rtlmeter run --cases "OpenTitan:default:cmark Vortex:sane:sgemm" --nExecute 0 --workRoot work-ccache-cold
     # Run with the just populated cache
-    ./designbench run --cases "OpenTitan:default:cmark Vortex:sane:sgemm" --nExecute 0 --workRoot work-ccache-hot
+    ./rtlmeter run --cases "OpenTitan:default:cmark Vortex:sane:sgemm" --nExecute 0 --workRoot work-ccache-hot
     # Compare results
-    ./designbench compare --steps cppbuild --metrics "elapsed cpu"  work-ccache-cold work-ccache-hot
+    ./rtlmeter compare --steps cppbuild --metrics "elapsed cpu"  work-ccache-cold work-ccache-hot
 
 ::
 
@@ -109,19 +109,19 @@ populate the cache with new objects. You might try something like:
 Enabling waveform tracing
 -------------------------
 
-You can turn on waveform tracing for all designbench benchmarks. To compile
+You can turn on waveform tracing for all RTLMeter benchmarks. To compile
 with trace capability, just pass the relevant Verilator options ``--trace`` or
 ``--trace-fst``, with possibly other ``--trace*`` options via the
-``--compileArgs`` option to ``./designbench run``. To actually enable tracing
+``--compileArgs`` option to ``./rtlmeter run``. To actually enable tracing
 at execution time, also pass ``+trace`` via ``--executeArgs``. (``+trace`` is
-checked by the designbench support code included in the top level module of
+checked by the RTLMeter support code included in the top level module of
 all benchmarks).
 
 .. code:: shell
 
     # Compile with trace capability
-    ./designbench run --cases "VeeR-EH1:default:cmark" --compileArgs="--trace" --nExecute=0
+    ./rtlmeter run --cases "VeeR-EH1:default:cmark" --compileArgs="--trace" --nExecute=0
     # Execute with tracing enabled at run-time
-    ./designbench run --cases "VeeR-EH1:default:cmark" --compileRoot work --executeRoot work-trace-on --executeArgs="+trace"
+    ./rtlmeter run --cases "VeeR-EH1:default:cmark" --compileRoot work --executeRoot work-trace-on --executeArgs="+trace"
     # Execute without racing enabled at run-time
-    ./designbench run --cases "VeeR-EH1:default:cmark" --compileRoot work --executeRoot work-trace-off
+    ./rtlmeter run --cases "VeeR-EH1:default:cmark" --compileRoot work --executeRoot work-trace-off

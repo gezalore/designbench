@@ -1,4 +1,4 @@
-# Copyright 2025 designbench contributors
+# Copyright 2025 RTLMeter contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -143,10 +143,10 @@ def addSubcommands(subparsers) -> None:
     # Subcommand "show"
     parser: argparse.ArgumentParser = subparsers.add_parser(
         "show",
-        help="Display information about designbench",
+        help="Display information about RTLMeter",
         description="""
             If a working directory 'DIR' is not given, display all available
-            items known to designbench. If 'DIR' is given, display only items
+            items known to RTLMeter. If 'DIR' is given, display only items
             that have recorded results in the given working directory.
         """,
         allow_abbrev=False,

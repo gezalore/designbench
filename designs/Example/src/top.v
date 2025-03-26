@@ -1,4 +1,4 @@
-// Copyright 2025 designbench contributors
+// Copyright 2025 RTLMeter contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -42,5 +42,6 @@ module top();
     end
   end
 
-`include "__designbench_top_include.vh"
+`include "__rtlmeter_top_include.vh"
+
 endmodule

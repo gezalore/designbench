@@ -18,7 +18,7 @@ run:
 
 .. code:: shell
 
-    ./designbench show --designs
+    ./rtlmeter show --designs
 
 Configuration
 -------------
@@ -51,4 +51,4 @@ To see all available cases, run:
 
 .. code:: shell
 
-    ./designbench show --cases
+    ./rtlmeter show --cases
