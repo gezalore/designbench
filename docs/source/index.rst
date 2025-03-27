@@ -28,6 +28,7 @@ produced by either of:
    running.rst
    report.rst
    compare.rst
+   collate.rst
    advanced.rst
 
 .. toctree::

@@ -145,3 +145,13 @@ class ArgExistingDirectory:
         if not os.path.isdir(val):
             raise argparse.ArgumentTypeError(f"'{val}' is not a directory")
         return os.path.abspath(val)
+
+
+@final
+class ArgExistingFileOrDirectory:
+    def __call__(self, val: str) -> str:
+        if not os.path.exists(val):
+            raise argparse.ArgumentTypeError(f"'{val}' does not exist")
+        if not os.path.isfile(val) and not os.path.isdir(val):
+            raise argparse.ArgumentTypeError(f"'{val}' is not a regular file, nor a directory")
+        return os.path.abspath(val)

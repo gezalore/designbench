@@ -15,9 +15,10 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import argparse
+import json
 import os
 import sys
-from typing import Any, Final, List
+from typing import Any, Final, List, final
 
 import numpy as np
 import scipy.stats
@@ -27,7 +28,12 @@ from sklearn.neighbors import LocalOutlierFactor
 import metrics
 import misc
 from context import CTX
-from subcommands.common import ArgExistingDirectory, ArgPatternMatcher, casesByTag
+from subcommands.common import (
+    ArgExistingDirectory,
+    ArgExistingFileOrDirectory,
+    ArgPatternMatcher,
+    casesByTag,
+)
 
 tabulate.PRESERVE_WHITESPACE = True
 tabulate.MIN_PADDING = 0
@@ -99,7 +105,7 @@ def printTable(table: List[List[str]], format: misc.Format, **kwargs) -> None:
 def reportMain(args: argparse.Namespace) -> None:
     misc.setFormat(args.format)
 
-    allData = metrics.readAll(args.dir)
+    allData = metrics.load(args.dataPath)
 
     cases = sorted(set(args.cases + [_.rpartition(":")[0] for _ in args.cases]))
 
@@ -167,8 +173,8 @@ def reportMain(args: argparse.Namespace) -> None:
 def compareMain(args: argparse.Namespace) -> None:
     misc.setFormat(args.format)
 
-    aAllData = metrics.readAll(args.aDir)
-    bAllData = metrics.readAll(args.bDir)
+    aAllData = metrics.load(args.aDataPath)
+    bAllData = metrics.load(args.bDataPath)
 
     cases = sorted(set(args.cases + [_.rpartition(":")[0] for _ in args.cases]))
     commonCases = sorted(_ for _ in cases if _ in aAllData and _ in bAllData)
@@ -309,7 +315,7 @@ def compareMain(args: argparse.Namespace) -> None:
 def rawdataMain(args: argparse.Namespace) -> None:
     misc.setFormat(args.format)
 
-    allData = metrics.readAll(args.dir)
+    allData = metrics.load(args.dataPath)
 
     cases = sorted(set(args.cases + [_.rpartition(":")[0] for _ in args.cases]))
 
@@ -353,10 +359,15 @@ def rawdataMain(args: argparse.Namespace) -> None:
 
                 if table:
                     table.append(tabulate.SEPARATING_LINE)
+                metricsFile = (
+                    (lambda _: os.path.relpath(_, args.dataPath))
+                    if os.path.isdir(args.dataPath)
+                    else (lambda _: "*collated*")
+                )
                 for s, z, o in zip(samples, zscores, outlierVotes):
                     vStr = misc.styleByInterval(f"{s.value:0.2f}", np.abs(z or 0.0), *zIntervals)
                     zStr = f"{z:0.3f}" if z is not None else ""
-                    table.append([case, vStr, zStr, "+" * o, os.path.relpath(s.file, args.dir)])
+                    table.append([case, vStr, zStr, "+" * o, metricsFile(s.file)])
 
             if not table:
                 continue
@@ -372,6 +383,19 @@ def rawdataMain(args: argparse.Namespace) -> None:
                 disable_numparse=True,
                 colalign=["left", "right", "right", "right", "left"],
             )
+
+
+def collateMain(args: argparse.Namespace) -> None:
+    allData = metrics.load(args.dir)
+
+    @final
+    class Encoder(json.JSONEncoder):
+        def default(self, o):
+            if isinstance(o, metrics.Sample):
+                return o.value
+            return super().default(o)
+
+    print(json.dumps(allData, indent=2, cls=Encoder))
 
 
 def addCommonArgs(parser: argparse.ArgumentParser) -> None:
@@ -415,12 +439,13 @@ def addSubcommands(subparsers) -> None:
         metavar="STEPS",
         default="verilate execute",
     )
-    reportParser.add_argument(
-        "dir",
-        help="Work directory of run",
-        type=ArgExistingDirectory(),
+    reportParserDirGroup = reportParser.add_mutually_exclusive_group()
+    reportParserDirGroup.add_argument(
+        "dataPath",
+        help="Work directory of run, or collated data file",
+        type=ArgExistingFileOrDirectory(),
         default=CTX.defaultWorkDir,
-        metavar="DIR",
+        metavar="DATA",
         nargs="?",
     )
 
@@ -448,16 +473,16 @@ def addSubcommands(subparsers) -> None:
         default="verilate execute",
     )
     compareParser.add_argument(
-        "aDir",
-        help="Working director of first run (A)",
-        type=ArgExistingDirectory(),
-        metavar="ADIR",
+        "aDataPath",
+        help="Working director, or collated data file of first run (A)",
+        type=ArgExistingFileOrDirectory(),
+        metavar="ADATA",
     )
     compareParser.add_argument(
-        "bDir",
-        help="Working director of second run (B)",
-        type=ArgExistingDirectory(),
-        metavar="BDIR",
+        "bDataPath",
+        help="Working director, or collated data file of second run (B)",
+        type=ArgExistingFileOrDirectory(),
+        metavar="BDATA",
     )
 
     # Subcommand "rawdata"
@@ -484,6 +509,24 @@ def addSubcommands(subparsers) -> None:
         default="verilate execute",
     )
     rawdataParser.add_argument(
+        "dataPath",
+        help="Work directory of run, or collated data file",
+        type=ArgExistingFileOrDirectory(),
+        default=CTX.defaultWorkDir,
+        metavar="DATA",
+        nargs="?",
+    )
+
+    # Subcommand "collate"
+    collateParser: argparse.ArgumentParser = subparsers.add_parser(
+        "collate",
+        help="Collect and combine metrics gathered in working directory",
+        description="Print collated JSON data to stdout.",
+        allow_abbrev=False,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    collateParser.set_defaults(entryPoint=collateMain)
+    collateParser.add_argument(
         "dir",
         help="Work directory of run",
         type=ArgExistingDirectory(),

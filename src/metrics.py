@@ -107,8 +107,8 @@ class Sample:
 type Metrics = Dict[str, Dict[Step, Dict[Metric, List[Sample]]]]
 
 
-# Read all metrics from the given working directory.
-def readAll(rootDir: str) -> Metrics:
+# Read all metrics from the given working directory and collate into single data structure
+def collate(rootDir: str) -> Metrics:
     # The result
     allMetrics: Metrics = {}
 
@@ -146,3 +146,18 @@ def readAll(rootDir: str) -> Metrics:
     gatherMetrics(sortedSubDirs(rootDir))
     # Done
     return allMetrics
+
+
+def load(dataPath: str) -> Metrics:
+    # If directory, collate it
+    if os.path.isdir(dataPath):
+        return collate(dataPath)
+
+    # Otherwise it's a collated JSON file, just load it
+    with open(dataPath, "r", encoding="utf-8") as fd:
+        allData = json.load(fd)
+    for caseData in allData.values():
+        for stepData in caseData.values():
+            for samples in stepData.values():
+                samples[:] = map(lambda _ : Sample(_, dataPath), samples)
+    return allData

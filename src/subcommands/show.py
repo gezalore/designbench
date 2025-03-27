@@ -23,23 +23,23 @@ import tabulate
 import metrics
 from context import CTX
 from descriptors import ExecuteDescriptor
-from subcommands.common import TAGS, ArgExistingDirectory
+from subcommands.common import TAGS, ArgExistingFileOrDirectory
 
 
-def showCases(workRoot: str | None) -> None:
+def showCases(dataPath: str | None) -> None:
     items = CTX.availableCases
-    if workRoot is not None:
-        allData = metrics.readAll(workRoot)
+    if dataPath is not None:
+        allData = metrics.load(dataPath)
         items = [_ for _ in items if _ in allData]
     # Print them
     table = [[_, ", ".join(ExecuteDescriptor(_).tags)] for _ in items]
     print(tabulate.tabulate(table, headers=["Case", "Tags"], tablefmt="simple"))
 
 
-def showDesigns(workRoot: str | None, showLicense: bool) -> None:
+def showDesigns(dataPath: str | None, showLicense: bool) -> None:
     items = list(CTX.descriptors.keys())
-    if workRoot is not None:
-        allData = metrics.readAll(workRoot)
+    if dataPath is not None:
+        allData = metrics.load(dataPath)
         available = set(_.partition(":")[0] for _ in allData)
         items = [_ for _ in items if _ in available]
     # Print them
@@ -64,17 +64,17 @@ def showDesigns(workRoot: str | None, showLicense: bool) -> None:
     print(tabulate.tabulate(table, headers=headers, tablefmt="simple"))
 
 
-def showMetrics(workRoot: str | None) -> None:
+def showMetrics(dataPath: str | None) -> None:
     items = list(metrics.METRICS.keys())
-    if workRoot is not None:
-        allData = metrics.readAll(workRoot)
+    if dataPath is not None:
+        allData = metrics.load(dataPath)
         available: Set[metrics.Metric] = set()
         for caseData in allData.values():
             for stepData in caseData.values():
                 available.update(stepData.keys())
         # Might be bust
         if not available:
-            print(f"No metrics recored in {workRoot}")
+            print(f"No metrics recored in {dataPath}")
             return
         items = [_ for _ in items if _ in available]
     # Print them
@@ -92,17 +92,17 @@ def showMetrics(workRoot: str | None) -> None:
     )
 
 
-def showSteps(workRoot: str | None) -> None:
+def showSteps(dataPath: str | None) -> None:
     items = list(metrics.STEPS.keys())
-    if workRoot is not None:
-        allData = metrics.readAll(workRoot)
+    if dataPath is not None:
+        allData = metrics.load(dataPath)
         # Gather all metrics
         available: Set[metrics.Step] = set()
         for caseData in allData.values():
             available.update(caseData.keys())
         # Might be bust
         if not available:
-            print(f"No steps recored in {workRoot}")
+            print(f"No steps recored in {dataPath}")
             return
         items = [_ for _ in items if _ in available]
     # Print them
@@ -110,10 +110,10 @@ def showSteps(workRoot: str | None) -> None:
     print(tabulate.tabulate(table, headers=["Step", "Description"], tablefmt="simple"))
 
 
-def showTags(workRoot: str | None) -> None:
+def showTags(dataPath: str | None) -> None:
     items = list(TAGS.keys())
-    if workRoot is not None:
-        allData = metrics.readAll(workRoot)
+    if dataPath is not None:
+        allData = metrics.load(dataPath)
         cases = sorted(_ for _ in allData if _.count(":") == 2)
         available = set(tag for case in cases for tag in ExecuteDescriptor(case).tags)
         items = [_ for _ in items if _ in available]
@@ -124,17 +124,17 @@ def showTags(workRoot: str | None) -> None:
 
 def main(args: argparse.Namespace) -> None:
     if args.cases:
-        showCases(args.workRoot)
+        showCases(args.dataPath)
     elif args.designs:
-        showDesigns(args.workRoot, False)
+        showDesigns(args.dataPath, False)
     elif args.licenses:
-        showDesigns(args.workRoot, True)
+        showDesigns(args.dataPath, True)
     elif args.metrics:
-        showMetrics(args.workRoot)
+        showMetrics(args.dataPath)
     elif args.steps:
-        showSteps(args.workRoot)
+        showSteps(args.dataPath)
     elif args.tags:
-        showTags(args.workRoot)
+        showTags(args.dataPath)
     else:
         raise RuntimeError("unreachable")
 
@@ -145,9 +145,10 @@ def addSubcommands(subparsers) -> None:
         "show",
         help="Display information about RTLMeter",
         description="""
-            If a working directory 'DIR' is not given, display all available
-            items known to RTLMeter. If 'DIR' is given, display only items
-            that have recorded results in the given working directory.
+            If a working directory or collated data file 'DATA' is not given,
+            display all available items known to RTLMeter. If 'DATA' is given,
+            display only items that have recorded results in the given working
+            directory or data file.
         """,
         allow_abbrev=False,
     )
@@ -160,9 +161,9 @@ def addSubcommands(subparsers) -> None:
     group.add_argument("--steps", help="List valid steps", action="store_true")
     group.add_argument("--tags", help="List case tags", action="store_true")
     parser.add_argument(
-        "workRoot",
-        help="Root of working directory",
-        type=ArgExistingDirectory(),
-        metavar="DIR",
+        "dataPath",
+        help="Root of working directory, or collated data file",
+        type=ArgExistingFileOrDirectory(),
+        metavar="DATA",
         nargs="?",
     )
