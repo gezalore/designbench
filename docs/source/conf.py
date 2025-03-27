@@ -35,7 +35,7 @@ release = gitDescribe
 
 needs_sphinx = "8.2"
 
-extensions = []
+extensions = ["sphinx_copybutton"]
 
 exclude_patterns = []
 
