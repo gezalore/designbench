@@ -19,18 +19,30 @@ Start by cloning the repository, then ``cd`` to the root of the project:
 Setting up dependencies
 -----------------------
 
-Python dependencies are manged through a virtual environment (in the ``venv``
-subdirectory) that you can automatically set up by running the following
-command once, after cloning or updating the repository:
+We assume you have Python 3.9 or newer available through your shell ``$PATH``
+as ``python3``. To confirm, you can run ``python3 --version``.
+
+Python dependencies are manged through a virtual environment that you can
+set up automatically by running the following command once, after cloning or
+updating the repository:
 
 .. code:: shell
 
    make venv
 
-Verilator is picked up from the Shell ``$PATH``. To check you have
+This sets up a Python virtual environment in the ``venv`` subdirectory,
+and installs the dependencies listed in `python-requirements.txt
+<https://github.com/gezalore/designbench/blob/main/python-requirements.txt>`_.
+There is no need to activate or otherwise add the virtual environment from
+``venv`` to your shell environment. If necessary, it is safe to remove the
+``venv`` directory, or re-run ``make venv`` (e.g.: when changing the version
+of a Python, or a required package).
+
+Verilator is picked up from the shell ``$PATH``. To check you have
 ``verilator`` available, run ``which verilator``. Otherwise please see the
 `Verilator manual <https://verilator.org/guide/latest/install.html>`_ for
-instructions on how to install Verilator.
+instructions on how to install Verilator. Verilator 5.002 or later is
+required.
 
 Invocation
 ----------
