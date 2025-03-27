@@ -150,7 +150,8 @@ def reportMain(args: argparse.Namespace) -> None:
         # Print the table
         headers = ["Case", "#"]
         for metric in availableMetrics:
-            headers.append(metrics.metricDef(metric).header)
+            metricDef = metrics.metricDef(metric)
+            headers.append(f"{metricDef.header} [{metricDef.unit}]")
 
         print()
         print(misc.styled(step, style="bold"))
@@ -283,7 +284,11 @@ def compareMain(args: argparse.Namespace) -> None:
                 else "lower is better"
             )
             print()
-            print(misc.styled(f"{step} - {metricDef.header} - {hilo}", style="bold"))
+            print(
+                misc.styled(
+                    f"{step} - {metricDef.header} [{metricDef.unit}] - {hilo}", style="bold"
+                )
+            )
             printTable(
                 table,
                 args.format,
@@ -357,8 +362,9 @@ def rawdataMain(args: argparse.Namespace) -> None:
                 continue
 
             # Print the table
+            metricDef = metrics.metricDef(metric)
             print()
-            print(misc.styled(f"{step} - {metrics.metricDef(metric).header}", style="bold"))
+            print(misc.styled(f"{step} - {metricDef.header} [{metricDef.unit}]", style="bold"))
             printTable(
                 table,
                 args.format,

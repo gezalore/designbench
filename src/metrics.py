@@ -57,7 +57,8 @@ Metric = Literal[
 @final
 @dataclass(frozen=True)
 class MetricDef:
-    header: str  # Short descritpion usable a s a table header
+    header: str  # Short descritpion usable as a table header
+    unit: str  # Unit (dimension) of measurement
     accumulate: Callable[[float, float], float] | None  # Accumulate 2 samples
     identityValue: float | None  # Identity element of 'accumulate'
     higherIsBetter: bool | None  # Higher value is better
@@ -66,25 +67,25 @@ class MetricDef:
 
 # fmt: off
 METRICS: Final[Dict[Metric, MetricDef]] = {
-    "elapsed"   : MetricDef("Elapsed time [s]",     operator.add,   0,    False,
+    "elapsed"   : MetricDef("Elapsed time", "s",            operator.add,   0,    False,
                             "Wall clock time elapsed during the step (time %e)"),
-    "user"      : MetricDef("CPU User [s]",         operator.add,   0,    False,
+    "user"      : MetricDef("CPU User", "s",                operator.add,   0,    False,
                             "Cumulative CPU time used by the step in user mode (time %U)"),
-    "system"    : MetricDef("CPU System [s]",       operator.add,   0,    False,
+    "system"    : MetricDef("CPU System", "s",              operator.add,   0,    False,
                             "Cumulative CPU time used by the step in kernel mode (time %S)"),
-    "cpu"       : MetricDef("CPU Total [s]",        operator.add,   0,    False,
+    "cpu"       : MetricDef("CPU Total", "s",               operator.add,   0,    False,
                             "Sum of CPU User + CPU System"),
-    "memory"    : MetricDef("Peak memory [MB]",     max,            0,    False,
+    "memory"    : MetricDef("Peak memory", "MB",            max,            0,    False,
                             "Maximum resident set size durint the step (time %M)"),
-    "speed"     : MetricDef("Sim speed [kHz]",      None,           None, True,
+    "speed"     : MetricDef("Sim speed", "kHz",             None,           None, True,
                             "Frequency of main clock during simulation "
                             "(simulated clock cycles / elapsed time)"),
-    "clocks"    : MetricDef("Sim clock cycles",     operator.add,   0,    None,
+    "clocks"    : MetricDef("Sim clock cycles", "count",    operator.add,   0,    None,
                             "Number of simulated main clock cycles "
                             "(deterministic, for sanity checking only)"),
-    "traceSize" : MetricDef("Trace dump size [MB]", operator.add,   0,    False,
+    "traceSize" : MetricDef("Trace dump size", "MB",        operator.add,   0,    False,
                             "Size of trace dumps"),
-    "ccacheHit" : MetricDef("ccache hit rate [%]",  None,           None, True,
+    "ccacheHit" : MetricDef("ccache hit rate", "%",         None,           None, True,
                             "ccache hit rate during C++ compilation"),
 }
 #fmt : on
