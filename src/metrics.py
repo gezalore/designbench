@@ -155,7 +155,7 @@ def load(dataPath: str) -> Metrics:
 
     # Otherwise it's a collated JSON file, just load it
     with open(dataPath, "r", encoding="utf-8") as fd:
-        allData = json.load(fd)
+        allData = json.load(fd)["cases"]
     for caseData in allData.values():
         for stepData in caseData.values():
             for samples in stepData.values():

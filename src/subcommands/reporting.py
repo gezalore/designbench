@@ -386,7 +386,25 @@ def rawdataMain(args: argparse.Namespace) -> None:
 
 
 def collateMain(args: argparse.Namespace) -> None:
-    allData = metrics.load(args.dir)
+    # Include step and metric descriptions for downstream tools
+    stepList = list(sorted(metrics.STEPS.keys()))
+    allSteps = {_: {"description": metrics.stepDescription(_)} for _ in stepList}
+    metricList = list(sorted(metrics.METRICS.keys()))
+    allMetrics = {
+        _: {
+            "header": metrics.metricDef(_).header,
+            "unit": metrics.metricDef(_).unit,
+            "higherIsBetter": metrics.metricDef(_).higherIsBetter,
+            "description": metrics.metricDef(_).description,
+        }
+        for _ in metricList
+    }
+
+    # Gather data from working directory
+    caseData = metrics.load(args.dir)
+
+    # Assemble final record
+    result = {"steps": allSteps, "metrics": allMetrics, "cases": caseData}
 
     @final
     class Encoder(json.JSONEncoder):
@@ -395,7 +413,7 @@ def collateMain(args: argparse.Namespace) -> None:
                 return o.value
             return super().default(o)
 
-    print(json.dumps(allData, indent=2, cls=Encoder))
+    print(json.dumps(result, indent=2, cls=Encoder))
 
 
 def addCommonArgs(parser: argparse.ArgumentParser) -> None:
