@@ -15,6 +15,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import argparse
+import datetime
 import json
 import os
 import sys
@@ -386,6 +387,9 @@ def rawdataMain(args: argparse.Namespace) -> None:
 
 
 def collateMain(args: argparse.Namespace) -> None:
+    # Include the current date and time
+    now = datetime.datetime.now(datetime.UTC)
+
     # Include step and metric descriptions for downstream tools
     stepList = list(sorted(metrics.STEPS.keys()))
     allSteps = {_: {"description": metrics.stepDescription(_)} for _ in stepList}
@@ -404,7 +408,12 @@ def collateMain(args: argparse.Namespace) -> None:
     caseData = metrics.load(args.dir)
 
     # Assemble final record
-    result = {"steps": allSteps, "metrics": allMetrics, "cases": caseData}
+    result = {
+        "date": now.strftime("%Y/%m/%d-%H:%M:%S"),
+        "steps": allSteps,
+        "metrics": allMetrics,
+        "cases": caseData,
+    }
 
     @final
     class Encoder(json.JSONEncoder):
