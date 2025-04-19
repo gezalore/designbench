@@ -417,18 +417,26 @@ def collateMain(args: argparse.Namespace) -> None:
         encoding="utf-8",
     ).stdout.strip()
 
+    # Include cpuinfo
+    with open("/proc/cpuinfo", "r", encoding="utf-8") as fd:
+        # Ignore variable lines
+        cpuinfo = "".join(line for line in fd if "cpu MHz" not in line)
+
     # Include step and metric descriptions for downstream tools
-    stepList = list(sorted(metrics.STEPS.keys()))
-    allSteps = {_: {"description": metrics.stepDescription(_)} for _ in stepList}
-    metricList = list(sorted(metrics.METRICS.keys()))
+    allSteps = {
+        _: {  #
+            "description": metrics.stepDescription(_)
+        }
+        for _ in list(sorted(metrics.STEPS.keys()))
+    }
     allMetrics = {
-        _: {
+        _: {  #
             "header": metrics.metricDef(_).header,
             "unit": metrics.metricDef(_).unit,
             "higherIsBetter": metrics.metricDef(_).higherIsBetter,
             "description": metrics.metricDef(_).description,
         }
-        for _ in metricList
+        for _ in list(sorted(metrics.METRICS.keys()))
     }
 
     # Gather data from working directory
@@ -437,11 +445,12 @@ def collateMain(args: argparse.Namespace) -> None:
     # Assemble final record
     result = {
         "date": now.strftime("%Y/%m/%d-%H:%M:%S"),
+        "RTLMeterVersion": rltmeterVersion,
+        "VerilatorVersion": verilatorVersion,
+        "cpuinfo": cpuinfo,
         "steps": allSteps,
         "metrics": allMetrics,
         "cases": caseData,
-        "RTLMeterVersion": rltmeterVersion,
-        "VerilatorVersion": verilatorVersion,
     }
 
     @final
@@ -451,7 +460,7 @@ def collateMain(args: argparse.Namespace) -> None:
                 return o.value
             return super().default(o)
 
-    print(json.dumps(result, indent=2, cls=Encoder))
+    print(json.dumps(result, indent=2, sort_keys=True, cls=Encoder))
 
 
 def addCommonArgs(parser: argparse.ArgumentParser) -> None:
