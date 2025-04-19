@@ -26,7 +26,7 @@ To see the source repositories and the licenses of imported designs, run:
   ./rtlmeter show --licenses
 
 For RTLMeter itself, see `LICENSE
-<https://github.com/gezalore/designbench/blob/main/LICENSE>`_.
+<https://github.com/verilator/rtlmeter/blob/main/LICENSE>`_.
 
 Dependencies
 ============
@@ -39,10 +39,10 @@ available through your shell ``$PATH``:
 
 All other dependencies are managed via a Python virtual environment, please see
 the `Getting started guide
-<https://gezalore.github.io/designbench/gettingstarted.html>`_.
+<https://verilator.github.io/rtlmeter/gettingstarted.html>`_.
 
 Documentation
 =============
 
 Please see the published User and Developer
-`documentation <https://gezalore.github.io/designbench/>`_.
+`documentation <https://verilator.github.io/rtlmeter/>`_.

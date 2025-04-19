@@ -10,7 +10,7 @@ Start by cloning the repository, then ``cd`` to the root of the project:
 
 .. code:: shell
 
- git clone https://github.com/gezalore/designbench.git rtlmeter
+ git clone https://github.com/verilator/rtlmeter.git rtlmeter
 
 .. code:: shell
 
@@ -32,7 +32,7 @@ updating the repository:
 
 This sets up a Python virtual environment in the ``venv`` subdirectory,
 and installs the dependencies listed in `python-requirements.txt
-<https://github.com/gezalore/designbench/blob/main/python-requirements.txt>`_.
+<https://github.com/verilator/rtlmeter/blob/main/python-requirements.txt>`_.
 There is no need to activate or otherwise add the virtual environment from
 ``venv`` to your shell environment. If necessary, it is safe to remove the
 ``venv`` directory, or re-run ``make venv`` (e.g.: when changing the version

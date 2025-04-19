@@ -11,7 +11,7 @@ For examples, please refer to the existing descriptors in the repository (
 
 The formal schema of the descriptor used for run-time validation can
 be found in `src/schema.yaml
-<https://github.com/gezalore/designbench/blob/main/src/schema.yaml>`_.
+<https://github.com/verilator/rtlmeter/blob/main/src/schema.yaml>`_.
 
 Types of entries
 ----------------

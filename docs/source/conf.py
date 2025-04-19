@@ -58,8 +58,8 @@ html_theme_options = {}
 
 html_context = {
     "display_github": True,
-    "github_user": "gezalore",
-    "github_repo": "designbench",
+    "github_user": "verilator",
+    "github_repo": "rtlmeter",
     "github_version": "main/docs/source/",
 }
 
