@@ -18,6 +18,7 @@ import argparse
 import datetime
 import json
 import os
+import subprocess
 import sys
 from typing import Any, Final, List, final
 
@@ -390,6 +391,32 @@ def collateMain(args: argparse.Namespace) -> None:
     # Include the current date and time
     now = datetime.datetime.now(datetime.UTC)
 
+    # Include git revsion or RTLMeter
+    rltmeterVersion = subprocess.run(
+        [  # Command
+            "git",
+            f"--git-dir={os.path.join(CTX.rootDir, '.git')}",
+            "describe",
+            "--always",
+            "--dirty=-dirty",
+            "--abbrev=16",
+        ],
+        capture_output=True,
+        check=True,
+        encoding="utf-8",
+    ).stdout.strip()
+
+    # Include Verilator version
+    verilatorVersion = subprocess.run(
+        [  # Command
+            "verilator",
+            "--version",
+        ],
+        capture_output=True,
+        check=True,
+        encoding="utf-8",
+    ).stdout.strip()
+
     # Include step and metric descriptions for downstream tools
     stepList = list(sorted(metrics.STEPS.keys()))
     allSteps = {_: {"description": metrics.stepDescription(_)} for _ in stepList}
@@ -413,6 +440,8 @@ def collateMain(args: argparse.Namespace) -> None:
         "steps": allSteps,
         "metrics": allMetrics,
         "cases": caseData,
+        "RTLMeterVersion": rltmeterVersion,
+        "VerilatorVersion": verilatorVersion,
     }
 
     @final
